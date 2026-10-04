@@ -20,7 +20,7 @@ Automated tool to create Catholic Mass PowerPoint presentations (`.pptx`) for ch
 ## File Structure
 
 - `generate_mass_ppt.py`: Main Python generation script.
-- `mass_of_renew_template.pptx`: PowerPoint template for the Mass.
+- `mass_template.pptx`: PowerPoint template for the Mass.
 - `mass_setup.csv`: Weekly configuration mapping Mass parts to hymn names.
 - `ppt_structure.md`: Master structural layout of the Mass presentation.
 - `assets/`: Directory containing hymn markdown files (e.g. `the_churchs_one_foundation.md`, `PW/as_the_deer.md`).
@@ -45,7 +45,7 @@ python3 generate_mass_ppt.py [OPTIONS]
 
 Options:
   --csv PATH         Path to CSV setup file (default: mass_setup.csv)
-  --template PATH    Path to PPTX template (default: mass_of_renew_template.pptx)
+  --template PATH    Path to PPTX template (default: mass_template.pptx)
   --output PATH      Output file path (default: mass_presentation.pptx)
   --date YYYY-MM-DD  Target Sunday date (defaults to upcoming Sunday)
   --title TEXT       Override the title slide text (e.g. "27th Sunday in Ordinary Time")

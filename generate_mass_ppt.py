@@ -820,8 +820,7 @@ def generate_presentation(csv_path, template_path, output_path, title_text=None,
 def main():
     parser = argparse.ArgumentParser(description="Automate Catholic Mass PowerPoint generation.")
     parser.add_argument("--csv", default="mass_setup.csv", help="Path to input CSV setup file.")
-    default_tpl = "mass_template.pptx" if os.path.exists("mass_template.pptx") else "mass_of_renew_template.pptx"
-    parser.add_argument("--template", default=default_tpl, help="Path to PowerPoint template.")
+    parser.add_argument("--template", default="mass_template.pptx", help="Path to PowerPoint template.")
     parser.add_argument("--output", default="mass_presentation.pptx", help="Path for generated output presentation.")
     parser.add_argument("--title", default=None, help="Override title slide text (e.g. '27th Sunday in Ordinary Time').")
     parser.add_argument("--response", default=None, help="Override responsorial psalm response text.")
