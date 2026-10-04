@@ -9,7 +9,7 @@ venv/
 env/
 ENV/
 
-# Generated PPT outputs (keep mass_template.pptx as the master template)
+# Generated PPT outputs (mass_template.pptx is the master template)
 mass_presentation.pptx
 test_*.pptx
 *_output.pptx

@@ -44,7 +44,10 @@
       --btn-secondary-text: #334155;
       --btn-secondary-border: #cbd5e1;
       --bottom-bar-bg: rgba(255, 255, 255, 0.95);
-      --dropdown-hover: #f1f5f9;
+      --dropdown-bg: #f1f5f9;
+      --dropdown-hover: #e2e8f0;
+      --dropdown-border: #cbd5e1;
+      --dropdown-item-border: #e2e8f0;
       --badge-bg: #f1f5f9;
       --badge-text: #64748b;
       --btn-cancel-bg: #e2e8f0;
@@ -81,7 +84,10 @@
       --btn-secondary-text: #cbd5e1;
       --btn-secondary-border: #334155;
       --bottom-bar-bg: rgba(15, 23, 42, 0.95);
-      --dropdown-hover: #334155;
+      --dropdown-bg: #334155;
+      --dropdown-hover: #475569;
+      --dropdown-border: #475569;
+      --dropdown-item-border: #3d4f66;
       --badge-bg: #334155;
       --badge-text: #94a3b8;
       --btn-cancel-bg: #334155;
@@ -368,10 +374,10 @@
       top: calc(100% + 4px);
       left: 0;
       right: 0;
-      background: var(--card-bg);
-      border: 1px solid var(--border);
+      background: var(--dropdown-bg);
+      border: 1px solid var(--dropdown-border);
       border-radius: 10px;
-      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.25);
       max-height: 240px;
       overflow-y: auto;
       z-index: 50;
@@ -381,7 +387,7 @@
     .dropdown-item {
       padding: 10px 14px;
       cursor: pointer;
-      border-bottom: 1px solid var(--border-light);
+      border-bottom: 1px solid var(--dropdown-item-border);
       transition: background 0.15s;
     }
 
