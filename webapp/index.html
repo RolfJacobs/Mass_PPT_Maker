@@ -814,6 +814,7 @@
         <div class="date-label">Sunday Mass</div>
         <div id="dateHuman" style="font-weight: 700; font-size: 0.95rem; color: var(--primary);">Upcoming Sunday</div>
         <div id="liturgicalTitle" style="font-size: 0.8rem; color: var(--accent); font-weight: 600; margin-top: 2px; display: none;"></div>
+        <div id="liturgicalPsalm" style="font-size: 0.8rem; color: var(--accent); font-weight: 600; font-style: italic; margin-top: 2px; display: none;"></div>
       </div>
       <input type="date" id="massDate" class="date-input">
     </div>
@@ -1227,6 +1228,117 @@
       return selectedIds.map(id => HYMN_CATALOG.find(h => h.id === id)).filter(Boolean);
     }
 
+    const LECTIONARY_PSALMS = {
+      ordinary: {
+        A: {
+          1: '29', 2: '40', 3: '27', 4: '146', 5: '112', 6: '119', 7: '103', 8: '62', 9: '31', 10: '50',
+          11: '100', 12: '69', 13: '89', 14: '145', 15: '65', 16: '86', 17: '119', 18: '145', 19: '85', 20: '67',
+          21: '138', 22: '63', 23: '95', 24: '103', 25: '145', 26: '25', 27: '80', 28: '23', 29: '96', 30: '18',
+          31: '131', 32: '63', 33: '128', 34: '23'
+        },
+        B: {
+          1: '29', 2: '40', 3: '25', 4: '95', 5: '147', 6: '32', 7: '41', 8: '103', 9: '81', 10: '130',
+          11: '92', 12: '107', 13: '30', 14: '123', 15: '85', 16: '23', 17: '145', 18: '78', 19: '34', 20: '34',
+          21: '34', 22: '15', 23: '146', 24: '116', 25: '54', 26: '19', 27: '128', 28: '90', 29: '33', 30: '126',
+          31: '18', 32: '146', 33: '16', 34: '93'
+        },
+        C: {
+          1: '29', 2: '96', 3: '19', 4: '71', 5: '138', 6: '1', 7: '103', 8: '92', 9: '117', 10: '30',
+          11: '32', 12: '63', 13: '16', 14: '66', 15: '69', 16: '15', 17: '138', 18: '90', 19: '33', 20: '40',
+          21: '117', 22: '68', 23: '90', 24: '51', 25: '113', 26: '146', 27: '95', 28: '98', 29: '121', 30: '34',
+          31: '145', 32: '17', 33: '98', 34: '122'
+        }
+      },
+      advent: {
+        A: { 1: '122', 2: '72', 3: '146', 4: '24' },
+        B: { 1: '80', 2: '85', 3: 'Luke 1 (Magnificat)', 4: '89' },
+        C: { 1: '25', 2: '126', 3: 'Isaiah 12', 4: '80' }
+      },
+      lent: {
+        A: { 1: '51', 2: '33', 3: '95', 4: '23', 5: '130', palm: '22' },
+        B: { 1: '25', 2: '116', 3: '19', 4: '137', 5: '51', palm: '22' },
+        C: { 1: '91', 2: '27', 3: '103', 4: '34', 5: '126', palm: '22' }
+      },
+      easter: {
+        A: { 1: '118', 2: '118', 3: '16', 4: '23', 5: '33', 6: '66', ascension: '47', 7: '27', pentecost: '104' },
+        B: { 1: '118', 2: '118', 3: '4', 4: '118', 5: '22', 6: '98', ascension: '47', 7: '103', pentecost: '104' },
+        C: { 1: '118', 2: '118', 3: '30', 4: '100', 5: '145', 6: '67', ascension: '47', 7: '97', pentecost: '104' }
+      }
+    };
+
+    function resolveLectionaryPsalm(ev, litYearStr) {
+      if (!ev) return '';
+      const readings = ev.readings || {};
+      if (readings.responsorial_psalm && readings.responsorial_psalm.trim()) {
+        return readings.responsorial_psalm.trim();
+      }
+
+      const y = (litYearStr && litYearStr.includes('B')) ? 'B' : ((litYearStr && litYearStr.includes('C')) ? 'C' : 'A');
+      const key = ev.event_key || '';
+      const name = (ev.name || '').toLowerCase();
+
+      // Ordinary time
+      let m = key.match(/OrdSunday(\d+)/i) || name.match(/(\d+)(?:st|nd|rd|th)?\s+sunday\s+of\s+ordinary\s+time/i);
+      if (m) {
+        const w = parseInt(m[1], 10);
+        return (LECTIONARY_PSALMS.ordinary[y] && LECTIONARY_PSALMS.ordinary[y][w]) || '';
+      }
+
+      // Christ the King
+      if (key.toLowerCase().includes('christking') || name.includes('christ the king')) {
+        return { A: '23', B: '93', C: '122' }[y] || '23';
+      }
+
+      // Trinity
+      if (key.toLowerCase().includes('trinity') || name.includes('trinity')) {
+        return { A: 'Daniel 3', B: '33', C: '8' }[y] || '33';
+      }
+
+      // Corpus Christi
+      if (key.toLowerCase().includes('corpuschristi') || name.includes('body and blood')) {
+        return { A: '147', B: '116', C: '110' }[y] || '116';
+      }
+
+      // Advent
+      m = key.match(/Advent(\d)/i) || name.match(/(first|second|third|fourth|1st|2nd|3rd|4th)\s+sunday\s+of\s+advent/i);
+      if (m) {
+        const wMap = { first: 1, '1st': 1, second: 2, '2nd': 2, third: 3, '3rd': 3, fourth: 4, '4th': 4 };
+        const w = parseInt(m[1], 10) || wMap[m[1].toLowerCase()] || 1;
+        return (LECTIONARY_PSALMS.advent[y] && LECTIONARY_PSALMS.advent[y][w]) || '';
+      }
+
+      // Lent
+      if (key.toLowerCase().includes('palmsun') || name.includes('palm sunday')) return '22';
+      m = key.match(/Lent(\d)/i) || name.match(/(first|second|third|fourth|fifth|1st|2nd|3rd|4th|5th)\s+sunday\s+of\s+lent/i);
+      if (m) {
+        const wMap = { first: 1, '1st': 1, second: 2, '2nd': 2, third: 3, '3rd': 3, fourth: 4, '4th': 4, fifth: 5, '5th': 5 };
+        const w = parseInt(m[1], 10) || wMap[m[1].toLowerCase()] || 1;
+        return (LECTIONARY_PSALMS.lent[y] && LECTIONARY_PSALMS.lent[y][w]) || '';
+      }
+
+      // Easter
+      if (key.toLowerCase() === 'easter' || name === 'easter sunday') return '118';
+      if (key.toLowerCase().includes('pentecost') || name.includes('pentecost')) return '104';
+      if (key.toLowerCase().includes('ascension') || name.includes('ascension')) return '47';
+      m = key.match(/Easter(\d)/i) || name.match(/(second|third|fourth|fifth|sixth|seventh|2nd|3rd|4th|5th|6th|7th)\s+sunday\s+of\s+easter/i);
+      if (m) {
+        const wMap = { second: 2, '2nd': 2, third: 3, '3rd': 3, fourth: 4, '4th': 4, fifth: 5, '5th': 5, sixth: 6, '6th': 6, seventh: 7, '7th': 7 };
+        const w = parseInt(m[1], 10) || wMap[m[1].toLowerCase()] || 2;
+        return (LECTIONARY_PSALMS.easter[y] && LECTIONARY_PSALMS.easter[y][w]) || '';
+      }
+
+      // Feasts
+      if (key.toLowerCase().includes('holyfamily') || name.includes('holy family')) return { A: '128', B: '105', C: '84' }[y] || '128';
+      if (key.toLowerCase().includes('christmas2') || name.includes('2nd sunday after christmas')) return '147';
+      if (key.toLowerCase().includes('epiphany') || name.includes('epiphany')) return '72';
+      if (key.toLowerCase().includes('baptism') || name.includes('baptism')) return '29';
+      if (key.toLowerCase().includes('allsaints') || name.includes('all saints')) return '24';
+      if (key.toLowerCase().includes('assumption') || name.includes('assumption')) return '45';
+      if (name.includes('peter') && name.includes('paul')) return '34';
+
+      return '';
+    }
+
     const _litcalYearCache = {};
 
     async function fetchLiturgicalCelebration(dateISO) {
@@ -1269,9 +1381,12 @@
         litYear = cycles[cycleYear % 3];
       }
 
+      const psalm = resolveLectionaryPsalm(ev, litYear);
+
       return {
         name: ev.name,
         liturgicalYear: litYear,
+        psalm: psalm,
         season: ev.liturgical_season || '',
         color: (ev.color && ev.color[0]) || 'green',
         event_key: ev.event_key || '',
@@ -1284,6 +1399,7 @@
       state.liturgicalInfo = info;
 
       const titleElem = document.getElementById('liturgicalTitle');
+      const psalmElem = document.getElementById('liturgicalPsalm');
       if (info && info.name) {
         if (titleElem) {
           const yearSuffix = (info.liturgicalYear && !info.name.toLowerCase().includes(info.liturgicalYear.toLowerCase()))
@@ -1292,8 +1408,18 @@
           titleElem.textContent = `${info.name}${yearSuffix}`;
           titleElem.style.display = 'block';
         }
+        if (psalmElem) {
+          if (info.psalm) {
+            const clean = info.psalm.replace(/^Psalm\s*/i, '').trim();
+            psalmElem.textContent = `Psalm: ${clean}`;
+            psalmElem.style.display = 'block';
+          } else {
+            psalmElem.style.display = 'none';
+          }
+        }
       } else {
         if (titleElem) titleElem.style.display = 'none';
+        if (psalmElem) psalmElem.style.display = 'none';
       }
 
       state.suggestedHymns = {
@@ -1734,12 +1860,16 @@
     function buildHumanSummary() {
       const dateText = dateHuman.textContent || massDateInput.value;
       const titleElem = document.getElementById('liturgicalTitle');
+      const psalmElem = document.getElementById('liturgicalPsalm');
       const celebrationLine = (titleElem && titleElem.textContent && titleElem.style.display !== 'none')
         ? ` (${titleElem.textContent})`
         : '';
+      const psalmLine = (psalmElem && psalmElem.textContent && psalmElem.style.display !== 'none')
+        ? `\n📖 _${psalmElem.textContent}_`
+        : '';
       const lines = [
         `⛪ *St Ninians Mass Setup*`,
-        `📅 *${dateText}${celebrationLine}*`,
+        `📅 *${dateText}${celebrationLine}*${psalmLine}`,
         ``,
         `🎵 *Entrance Hymn:*`,
         state.entrance ? `• ${getHymnDisplay(state.entrance)}` : `• _(None selected)_`,
