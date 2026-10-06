@@ -1171,8 +1171,22 @@
       const ev = events.find(e => e.date && e.date.startsWith(dateISO));
       if (!ev) return null;
 
+      // Extract or compute liturgical year (Year A, Year B, or Year C)
+      let litYear = ev.liturgical_year || '';
+      if (litYear) {
+        litYear = litYear.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' ');
+      } else {
+        const d = new Date(dateISO + 'T12:00:00');
+        const y = d.getFullYear();
+        const isNextCycle = (d.getMonth() === 10 && d.getDate() >= 27) || (d.getMonth() === 11);
+        const cycleYear = isNextCycle ? y + 1 : y;
+        const cycles = ['Year C', 'Year A', 'Year B'];
+        litYear = cycles[cycleYear % 3];
+      }
+
       return {
         name: ev.name,
+        liturgicalYear: litYear,
         season: ev.liturgical_season || '',
         color: (ev.color && ev.color[0]) || 'green',
         event_key: ev.event_key || '',
@@ -1187,7 +1201,10 @@
       const titleElem = document.getElementById('liturgicalTitle');
       if (info && info.name) {
         if (titleElem) {
-          titleElem.textContent = info.name;
+          const yearSuffix = (info.liturgicalYear && !info.name.toLowerCase().includes(info.liturgicalYear.toLowerCase()))
+            ? ` ${info.liturgicalYear}`
+            : '';
+          titleElem.textContent = `${info.name}${yearSuffix}`;
           titleElem.style.display = 'block';
         }
       } else {
@@ -1200,6 +1217,8 @@
         communion: getSuggestedHymns('communion', info, dateISO),
         recessional: getSuggestedHymns('recessional', info, dateISO)
       };
+
+      updatePreview();
     }
 
     // DOM Elements
@@ -1629,9 +1648,13 @@
 
     function buildHumanSummary() {
       const dateText = dateHuman.textContent || massDateInput.value;
+      const titleElem = document.getElementById('liturgicalTitle');
+      const celebrationLine = (titleElem && titleElem.textContent && titleElem.style.display !== 'none')
+        ? ` (${titleElem.textContent})`
+        : '';
       const lines = [
         `⛪ *St Ninians Mass Setup*`,
-        `📅 *${dateText}*`,
+        `📅 *${dateText}${celebrationLine}*`,
         ``,
         `🎵 *Entrance Hymn:*`,
         state.entrance ? `• ${getHymnDisplay(state.entrance)}` : `• _(None selected)_`,
