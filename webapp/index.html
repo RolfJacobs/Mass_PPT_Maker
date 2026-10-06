@@ -810,11 +810,11 @@
   <main>
     <!-- Sunday Date Selector -->
     <div class="date-card">
-      <div>
+      <div style="flex: 1; min-width: 0; margin-right: 12px;">
         <div class="date-label">Sunday Mass</div>
         <div id="dateHuman" style="font-weight: 700; font-size: 0.95rem; color: var(--primary);">Upcoming Sunday</div>
-        <div id="liturgicalTitle" style="font-size: 0.8rem; color: var(--accent); font-weight: 600; margin-top: 2px; display: none;"></div>
-        <div id="liturgicalPsalm" style="font-size: 0.8rem; color: var(--accent); font-weight: 600; font-style: italic; margin-top: 2px; display: none;"></div>
+        <div id="liturgicalTitle" style="font-size: 0.8rem; color: var(--accent); font-weight: 600; margin-top: 2px; line-height: 1.35; display: none;"></div>
+        <div id="liturgicalPsalm" style="font-size: 0.8rem; color: var(--accent); font-weight: 600; font-style: italic; margin-top: 2px; line-height: 1.35; display: none;"></div>
       </div>
       <input type="date" id="massDate" class="date-input">
     </div>
@@ -1237,7 +1237,7 @@
       const name = (ev.name || '').toLowerCase();
 
       // 1. Ordinary time
-      let m = evKey.match(/ordsunday(\d+)/i) || name.match(/(\d+)(?:st|nd|rd|th)?\s+sunday\s+(?:in|of)\s+ordinary\s+time/i);
+      let m = evKey.match(/ordsunday(\d+)/i) || name.match(/(\d+)(?:st|nd|rd|th)?\s+sun(?:day)?\s+(?:in|of)\s+ord(?:inary)?\s+time/i);
       if (m) {
         const w = String(parseInt(m[1], 10));
         return (ps.ordinary && ps.ordinary[y] && ps.ordinary[y][w]) || '';
@@ -1264,7 +1264,7 @@
       }
 
       // 6. Advent
-      m = evKey.match(/advent(\d)/i) || name.match(/(first|second|third|fourth|1st|2nd|3rd|4th|\d+)(?:st|nd|rd|th)?\s+sunday\s+of\s+advent/i);
+      m = evKey.match(/advent(\d)/i) || name.match(/(first|second|third|fourth|1st|2nd|3rd|4th|\d+)(?:st|nd|rd|th)?\s+sun(?:day)?\s+of\s+advent/i);
       if (m) {
         const wMap = { first: '1', '1st': '1', second: '2', '2nd': '2', third: '3', '3rd': '3', fourth: '4', '4th': '4' };
         const w = wMap[m[1].toLowerCase()] || String(parseInt(m[1], 10) || 1);
@@ -1272,10 +1272,10 @@
       }
 
       // 7. Lent
-      if (evKey.includes('palmsun') || name.includes('palm sunday')) {
+      if (evKey.includes('palmsun') || name.includes('palm sunday') || name.includes('palm sun')) {
         return (ps.lent && ps.lent[y] && ps.lent[y]['palm']) || '';
       }
-      m = evKey.match(/lent(\d)/i) || name.match(/(first|second|third|fourth|fifth|1st|2nd|3rd|4th|5th|\d+)(?:st|nd|rd|th)?\s+sunday\s+of\s+lent/i);
+      m = evKey.match(/lent(\d)/i) || name.match(/(first|second|third|fourth|fifth|1st|2nd|3rd|4th|5th|\d+)(?:st|nd|rd|th)?\s+sun(?:day)?\s+of\s+lent/i);
       if (m) {
         const wMap = { first: '1', '1st': '1', second: '2', '2nd': '2', third: '3', '3rd': '3', fourth: '4', '4th': '4', fifth: '5', '5th': '5' };
         const w = wMap[m[1].toLowerCase()] || String(parseInt(m[1], 10) || 1);
@@ -1283,7 +1283,7 @@
       }
 
       // 8. Easter
-      if (evKey === 'easter' || name === 'easter sunday' || name === 'easter') {
+      if (evKey === 'easter' || name === 'easter sunday' || name === 'easter sun' || name === 'easter') {
         return (ps.easter && ps.easter[y] && ps.easter[y]['1']) || '';
       }
       if (evKey.includes('ascension') || name.includes('ascension')) {
@@ -1292,7 +1292,7 @@
       if (evKey.includes('pentecost') || name.includes('pentecost')) {
         return (ps.easter && ps.easter[y] && ps.easter[y]['pentecost']) || '';
       }
-      m = evKey.match(/easter(\d)/i) || name.match(/(second|third|fourth|fifth|sixth|seventh|2nd|3rd|4th|5th|6th|7th|\d+)(?:st|nd|rd|th)?\s+sunday\s+of\s+easter/i);
+      m = evKey.match(/easter(\d)/i) || name.match(/(second|third|fourth|fifth|sixth|seventh|2nd|3rd|4th|5th|6th|7th|\d+)(?:st|nd|rd|th)?\s+sun(?:day)?\s+of\s+easter/i);
       if (m) {
         const wMap = { second: '2', '2nd': '2', third: '3', '3rd': '3', fourth: '4', '4th': '4', fifth: '5', '5th': '5', sixth: '6', '6th': '6', seventh: '7', '7th': '7' };
         const w = wMap[m[1].toLowerCase()] || String(parseInt(m[1], 10) || 2);
@@ -1365,6 +1365,17 @@
       };
     }
 
+    function formatCelebrationTitle(name, litYear) {
+      if (!name) return '';
+      const yearSuffix = (litYear && !name.toLowerCase().includes(litYear.toLowerCase()))
+        ? ` ${litYear}`
+        : '';
+      let title = `${name}${yearSuffix}`;
+      return title
+        .replace(/\bSunday\b/gi, 'Sun')
+        .replace(/\bOrdinary\b/gi, 'Ord');
+    }
+
     async function updateLiturgicalSuggestions(dateISO) {
       const info = await fetchLiturgicalCelebration(dateISO);
       state.liturgicalInfo = info;
@@ -1373,10 +1384,7 @@
       const psalmElem = document.getElementById('liturgicalPsalm');
       if (info && info.name) {
         if (titleElem) {
-          const yearSuffix = (info.liturgicalYear && !info.name.toLowerCase().includes(info.liturgicalYear.toLowerCase()))
-            ? ` ${info.liturgicalYear}`
-            : '';
-          titleElem.textContent = `${info.name}${yearSuffix}`;
+          titleElem.textContent = formatCelebrationTitle(info.name, info.liturgicalYear);
           titleElem.style.display = 'block';
         }
         if (psalmElem) {

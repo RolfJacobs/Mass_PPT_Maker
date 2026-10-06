@@ -139,7 +139,7 @@ def resolve_lectionary_psalm_response(title, target_date=None, event_key=''):
     nm = (title or '').lower()
 
     # 1. Ordinary Sunday
-    m = re.search(r'ordsunday(\d+)', ev_k) or re.search(r'(\d+)(?:st|nd|rd|th)?\s+sunday\s+(?:in|of)\s+ordinary\s+time', nm)
+    m = re.search(r'ordsunday(\d+)', ev_k) or re.search(r'(\d+)(?:st|nd|rd|th)?\s+sun(?:day)?\s+(?:in|of)\s+ord(?:inary)?\s+time', nm)
     if m:
         w = str(int(m.group(1)))
         return ps.get('ordinary', {}).get(y, {}).get(w)
@@ -161,31 +161,31 @@ def resolve_lectionary_psalm_response(title, target_date=None, event_key=''):
         return ps.get('solemnities', {}).get('holy_family', {}).get(y)
 
     # 6. Advent
-    m = re.search(r'advent(\d)', ev_k) or re.search(r'(first|second|third|fourth|1st|2nd|3rd|4th|\d+)(?:st|nd|rd|th)?\s+sunday\s+of\s+advent', nm)
+    m = re.search(r'advent(\d)', ev_k) or re.search(r'(first|second|third|fourth|1st|2nd|3rd|4th|\d+)(?:st|nd|rd|th)?\s+sun(?:day)?\s+of\s+advent', nm)
     if m:
-        wMap = {'first': '1', '1st': '1', second: '2', '2nd': '2', third: '3', '3rd': '3', fourth: '4', '4th': '4'}
+        wMap = {'first': '1', '1st': '1', 'second': '2', '2nd': '2', 'third': '3', '3rd': '3', 'fourth': '4', '4th': '4'}
         w = wMap.get(m.group(1).lower(), m.group(1))
         return ps.get('advent', {}).get(y, {}).get(w)
 
     # 7. Lent
-    if 'palmsun' in ev_k or 'palm sunday' in nm:
+    if 'palmsun' in ev_k or 'palm sunday' in nm or 'palm sun' in nm:
         return ps.get('lent', {}).get(y, {}).get('palm')
-    m = re.search(r'lent(\d)', ev_k) or re.search(r'(first|second|third|fourth|fifth|1st|2nd|3rd|4th|5th|\d+)(?:st|nd|rd|th)?\s+sunday\s+of\s+lent', nm)
+    m = re.search(r'lent(\d)', ev_k) or re.search(r'(first|second|third|fourth|fifth|1st|2nd|3rd|4th|5th|\d+)(?:st|nd|rd|th)?\s+sun(?:day)?\s+of\s+lent', nm)
     if m:
-        wMap = {'first': '1', '1st': '1', second: '2', '2nd': '2', third: '3', '3rd': '3', fourth: '4', '4th': '4', fifth: '5', '5th': '5'}
+        wMap = {'first': '1', '1st': '1', 'second': '2', '2nd': '2', 'third': '3', '3rd': '3', 'fourth': '4', '4th': '4', 'fifth': '5', '5th': '5'}
         w = wMap.get(m.group(1).lower(), m.group(1))
         return ps.get('lent', {}).get(y, {}).get(w)
 
     # 8. Easter
-    if ev_k == 'easter' or 'easter sunday' in nm or nm == 'easter':
+    if ev_k == 'easter' or 'easter sunday' in nm or 'easter sun' in nm or nm == 'easter':
         return ps.get('easter', {}).get(y, {}).get('1')
     if 'ascension' in ev_k or 'ascension' in nm:
         return ps.get('easter', {}).get(y, {}).get('ascension')
     if 'pentecost' in ev_k or 'pentecost' in nm:
         return ps.get('easter', {}).get(y, {}).get('pentecost')
-    m = re.search(r'easter(\d)', ev_k) or re.search(r'(second|third|fourth|fifth|sixth|seventh|2nd|3rd|4th|5th|6th|7th|\d+)(?:st|nd|rd|th)?\s+sunday\s+of\s+easter', nm)
+    m = re.search(r'easter(\d)', ev_k) or re.search(r'(second|third|fourth|fifth|sixth|seventh|2nd|3rd|4th|5th|6th|7th|\d+)(?:st|nd|rd|th)?\s+sun(?:day)?\s+of\s+easter', nm)
     if m:
-        wMap = {'second': '2', '2nd': '2', third: '3', '3rd': '3', fourth: '4', '4th': '4', fifth: '5', '5th': '5', sixth: '6', '6th': '6', seventh: '7', '7th': '7'}
+        wMap = {'second': '2', '2nd': '2', 'third': '3', '3rd': '3', 'fourth': '4', '4th': '4', 'fifth': '5', '5th': '5', 'sixth': '6', '6th': '6', 'seventh': '7', '7th': '7'}
         w = wMap.get(m.group(1).lower(), m.group(1))
         return ps.get('easter', {}).get(y, {}).get(w)
 
@@ -596,20 +596,30 @@ def update_divider_background(prs, image_path):
     print(f"[Success] Updated divider background using {image_path} (1024x768 4:3)")
 
 
+def shorten_celebration_title(title):
+    """Shortens 'Sunday' to 'Sun' and 'Ordinary' to 'Ord' for neat layout wrapping."""
+    if not title:
+        return title
+    title = re.sub(r'\bSunday\b', 'Sun', title, flags=re.IGNORECASE)
+    title = re.sub(r'\bOrdinary\b', 'Ord', title, flags=re.IGNORECASE)
+    return title
+
+
 def update_title_slide(prs, title_text):
-    """Updates Slide 1 with Catholic Church week title (e.g. '27th Sunday in Ordinary Time')."""
+    """Updates Slide 1 with Catholic Church week title (e.g. '27th Sun in Ord Time')."""
     slide1 = prs.slides[0]
     # Shape 0 is GROUP containing banner picture and text box
     grp = slide1.shapes[0]
     txt_box = grp.shapes[1]
     tf = txt_box.text_frame
-    tf.text = title_text
+    shortened_title = shorten_celebration_title(title_text)
+    tf.text = shortened_title
     for p in tf.paragraphs:
         p.font.name = 'Calibri'
         p.font.size = Pt(32)
         p.font.bold = True
         p.alignment = PP_ALIGN.CENTER
-    print(f"[Success] Title slide updated: '{title_text}'")
+    print(f"[Success] Title slide updated: '{shortened_title}'")
 
 
 def enforce_center_alignment(prs):
