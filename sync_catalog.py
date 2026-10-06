@@ -73,9 +73,21 @@ def sync_catalog(assets_dir='assets', webapp_dir='webapp'):
             html,
             flags=re.DOTALL
         )
+        # Also sync psalms.json if available
+        psalms_path = os.path.join(webapp_dir, 'psalms.json')
+        if os.path.exists(psalms_path):
+            with open(psalms_path, 'r', encoding='utf-8') as pf:
+                psalms_data = json.load(pf)
+            psalms_json = json.dumps(psalms_data, separators=(',', ':'))
+            updated_html = re.sub(
+                r'let LECTIONARY_PSALM_RESPONSES = \{.*?\};',
+                lambda m: f'let LECTIONARY_PSALM_RESPONSES = {psalms_json};',
+                updated_html,
+                flags=re.DOTALL
+            )
         with open(html_path, 'w', encoding='utf-8') as f:
             f.write(updated_html)
-        print(f"[Success] Catalog embedded into {html_path}")
+        print(f"[Success] Catalog & Psalms embedded into {html_path}")
 
     print(f"[Success] Catalog synced: {len(hymns)} hymns written to {json_path}")
     return hymns

@@ -1228,113 +1228,84 @@
       return selectedIds.map(id => HYMN_CATALOG.find(h => h.id === id)).filter(Boolean);
     }
 
-    const LECTIONARY_PSALMS = {
-      ordinary: {
-        A: {
-          1: '29', 2: '40', 3: '27', 4: '146', 5: '112', 6: '119', 7: '103', 8: '62', 9: '31', 10: '50',
-          11: '100', 12: '69', 13: '89', 14: '145', 15: '65', 16: '86', 17: '119', 18: '145', 19: '85', 20: '67',
-          21: '138', 22: '63', 23: '95', 24: '103', 25: '145', 26: '25', 27: '80', 28: '23', 29: '96', 30: '18',
-          31: '131', 32: '63', 33: '128', 34: '23'
-        },
-        B: {
-          1: '29', 2: '40', 3: '25', 4: '95', 5: '147', 6: '32', 7: '41', 8: '103', 9: '81', 10: '130',
-          11: '92', 12: '107', 13: '30', 14: '123', 15: '85', 16: '23', 17: '145', 18: '78', 19: '34', 20: '34',
-          21: '34', 22: '15', 23: '146', 24: '116', 25: '54', 26: '19', 27: '128', 28: '90', 29: '33', 30: '126',
-          31: '18', 32: '146', 33: '16', 34: '93'
-        },
-        C: {
-          1: '29', 2: '96', 3: '19', 4: '71', 5: '138', 6: '1', 7: '103', 8: '92', 9: '117', 10: '30',
-          11: '32', 12: '63', 13: '16', 14: '66', 15: '69', 16: '15', 17: '138', 18: '90', 19: '33', 20: '40',
-          21: '117', 22: '68', 23: '90', 24: '51', 25: '113', 26: '146', 27: '95', 28: '98', 29: '121', 30: '34',
-          31: '145', 32: '17', 33: '98', 34: '122'
-        }
-      },
-      advent: {
-        A: { 1: '122', 2: '72', 3: '146', 4: '24' },
-        B: { 1: '80', 2: '85', 3: 'Luke 1 (Magnificat)', 4: '89' },
-        C: { 1: '25', 2: '126', 3: 'Isaiah 12', 4: '80' }
-      },
-      lent: {
-        A: { 1: '51', 2: '33', 3: '95', 4: '23', 5: '130', palm: '22' },
-        B: { 1: '25', 2: '116', 3: '19', 4: '137', 5: '51', palm: '22' },
-        C: { 1: '91', 2: '27', 3: '103', 4: '34', 5: '126', palm: '22' }
-      },
-      easter: {
-        A: { 1: '118', 2: '118', 3: '16', 4: '23', 5: '33', 6: '66', ascension: '47', 7: '27', pentecost: '104' },
-        B: { 1: '118', 2: '118', 3: '4', 4: '118', 5: '22', 6: '98', ascension: '47', 7: '103', pentecost: '104' },
-        C: { 1: '118', 2: '118', 3: '30', 4: '100', 5: '145', 6: '67', ascension: '47', 7: '97', pentecost: '104' }
-      }
-    };
-
-    function resolveLectionaryPsalm(ev, litYearStr) {
+    let LECTIONARY_PSALM_RESPONSES = {"ordinary":{"A":{"1":"The Lord will bless his people with peace.","2":"Here am I, Lord; I come to do your will.","3":"The Lord is my light and my salvation.","4":"Blessed are the poor in spirit; the kingdom of heaven is theirs!","5":"A light rises in the darkness for the upright.","6":"Blessed are those who walk in the law of the Lord!","7":"The Lord is kind and merciful.","8":"Rest in God alone, my soul.","9":"Lord, be my rock of safety.","10":"To one whose way is blameless, I will show the salvation of God.","11":"We are his people: the sheep of his flock.","12":"Lord, in your great love, answer me.","13":"Forever I will sing the goodness of the Lord.","14":"I will praise your name for ever, my king and my God.","15":"The seed that falls on good ground will yield a fruitful harvest.","16":"Lord, you are good and forgiving.","17":"Lord, I love your commands.","18":"The hand of the Lord feeds us; he answers all our needs.","19":"Lord, let us see your kindness, and grant us your salvation.","20":"O God, let all the nations praise you!","21":"Lord, your love is eternal; do not forsake the work of your hands.","22":"My soul is thirsting for you, O Lord my God.","23":"If today you hear his voice, harden not your hearts.","24":"The Lord is kind and merciful, slow to anger, and rich in compassion.","25":"The Lord is near to all who call upon him.","26":"Remember your mercies, O Lord.","27":"The vineyard of the Lord is the house of Israel.","28":"I shall live in the house of the Lord all the days of my life.","29":"Give the Lord glory and honor.","30":"I love you, Lord, my strength.","31":"In you, Lord, I have found my peace.","32":"My soul is thirsting for you, O Lord my God.","33":"Blessed are those who fear the Lord.","34":"The Lord is my shepherd; there is nothing I shall want."},"B":{"1":"The Lord will bless his people with peace.","2":"Here am I, Lord; I come to do your will.","3":"Teach me your ways, O Lord.","4":"If today you hear his voice, harden not your hearts.","5":"Praise the Lord, who heals the brokenhearted.","6":"I turn to you, Lord, in time of trouble, and you fill me with the joy of salvation.","7":"Lord, heal my soul, for I have sinned against you.","8":"The Lord is kind and merciful.","9":"Sing with joy to God our help.","10":"With the Lord there is mercy, and fullness of redemption.","11":"Lord, it is good to give thanks to you.","12":"Give thanks to the Lord, his love is everlasting.","13":"I will praise you, Lord, for you have rescued me.","14":"Our eyes are fixed on the Lord, pleading for his mercy.","15":"Lord, let us see your kindness, and grant us your salvation.","16":"The Lord is my shepherd; there is nothing I shall want.","17":"The hand of the Lord feeds us; he answers all our needs.","18":"The Lord gave them bread from heaven.","19":"Taste and see the goodness of the Lord.","20":"Taste and see the goodness of the Lord.","21":"Taste and see the goodness of the Lord.","22":"The one who does justice will live in the presence of the Lord.","23":"Praise the Lord, my soul!","24":"I will walk before the Lord, in the land of the living.","25":"The Lord upholds my life.","26":"The precepts of the Lord give joy to the heart.","27":"May the Lord bless us all the days of our lives.","28":"Fill us with your love, O Lord, and we will sing for joy!","29":"Lord, let your mercy be on us, as we place our trust in you.","30":"The Lord has done great things for us; we are filled with joy.","31":"I love you, Lord, my strength.","32":"Praise the Lord, my soul!","33":"You are my inheritance, O Lord.","34":"The Lord is king; he is robed in majesty."},"C":{"1":"The Lord will bless his people with peace.","2":"Proclaim his marvelous deeds to all the nations.","3":"Your words, Lord, are spirit and life.","4":"I will sing of your salvation.","5":"In the sight of the angels I will sing your praises, Lord.","6":"Blessed are they who hope in the Lord.","7":"The Lord is kind and merciful.","8":"Lord, it is good to give thanks to you.","9":"Go out to all the world and tell the Good News.","10":"I will praise you, Lord, for you have rescued me.","11":"Lord, forgive the wrong I have done.","12":"My soul is thirsting for you, O Lord my God.","13":"You are my inheritance, O Lord.","14":"Let all the earth cry out to God with joy.","15":"Turn to the Lord in your need, and you will live.","16":"He who does justice will live in the presence of the Lord.","17":"Lord, on the day I called for help, you answered me.","18":"If today you hear his voice, harden not your hearts.","19":"Blessed the people the Lord has chosen to be his own.","20":"Lord, come to my aid!","21":"Go out to all the world and tell the Good News.","22":"God, in your goodness, you have made a home for the poor.","23":"In every age, O Lord, you have been our refuge.","24":"I will rise and go to my father.","25":"Praise the Lord who lifts up the poor.","26":"Praise the Lord, my soul!","27":"If today you hear his voice, harden not your hearts.","28":"The Lord has revealed to the nations his saving power.","29":"Our help is from the Lord, who made heaven and earth.","30":"The Lord hears the cry of the poor.","31":"I will praise your name for ever, my king and my God.","32":"Lord, when your glory appears, my joy will be full.","33":"The Lord comes to rule the earth with justice.","34":"Let us go rejoicing to the house of the Lord."}},"advent":{"A":{"1":"Let us go rejoicing to the house of the Lord.","2":"Justice shall flourish in his time, and fullness of peace for ever.","3":"Lord, come and save us.","4":"Let the Lord enter; he is king of glory."},"B":{"1":"Lord, make us turn to you; let us see your face and we shall be saved.","2":"Lord, let us see your kindness, and grant us your salvation.","3":"My soul rejoices in my God.","4":"Forever I will sing the goodness of the Lord."},"C":{"1":"To you, O Lord, I lift my soul.","2":"The Lord has done great things for us; we are filled with joy.","3":"Cry out with joy and gladness: for among you is the great and Holy One of Israel.","4":"Lord, make us turn to you; let us see your face and we shall be saved."}},"lent":{"A":{"1":"Be merciful, O Lord, for we have sinned.","2":"Lord, let your mercy be on us, as we place our trust in you.","3":"If today you hear his voice, harden not your hearts.","4":"The Lord is my shepherd; there is nothing I shall want.","5":"With the Lord there is mercy and fullness of redemption.","palm":"My God, my God, why have you abandoned me?"},"B":{"1":"Your ways, O Lord, are love and truth to those who keep your covenant.","2":"I will walk before the Lord, in the land of the living.","3":"Lord, you have the words of everlasting life.","4":"Let my tongue be silenced, if I ever forget you!","5":"Create a clean heart in me, O God.","palm":"My God, my God, why have you abandoned me?"},"C":{"1":"Be with me, Lord, when I am in trouble.","2":"The Lord is my light and my salvation.","3":"The Lord is kind and merciful.","4":"Taste and see the goodness of the Lord.","5":"The Lord has done great things for us; we are filled with joy.","palm":"My God, my God, why have you abandoned me?"}},"easter":{"A":{"1":"This is the day the Lord has made; let us rejoice and be glad in it.","2":"Give thanks to the Lord for he is good, his love is everlasting.","3":"Lord, you will show us the path of life.","4":"The Lord is my shepherd; there is nothing I shall want.","5":"Lord, let your mercy be on us, as we place our trust in you.","6":"Let all the earth cry out to God with joy.","ascension":"God mounts his throne to shouts of joy: a blare of trumpets for the Lord.","7":"I believe that I shall see the good things of the Lord in the land of the living.","pentecost":"Lord, send out your Spirit, and renew the face of the earth."},"B":{"1":"This is the day the Lord has made; let us rejoice and be glad in it.","2":"Give thanks to the Lord for he is good, his love is everlasting.","3":"Lord, let the light of your face shine upon us.","4":"The stone rejected by the builders has become the cornerstone.","5":"I will praise you, Lord, in the assembly of your people.","6":"The Lord has revealed to the nations his saving power.","ascension":"God mounts his throne to shouts of joy: a blare of trumpets for the Lord.","7":"The Lord has set his throne in heaven.","pentecost":"Lord, send out your Spirit, and renew the face of the earth."},"C":{"1":"This is the day the Lord has made; let us rejoice and be glad in it.","2":"Give thanks to the Lord for he is good, his love is everlasting.","3":"I will praise you, Lord, for you have rescued me.","4":"We are his people, the sheep of his flock.","5":"I will praise your name for ever, my king and my God.","6":"O God, let all the nations praise you!","ascension":"God mounts his throne to shouts of joy: a blare of trumpets for the Lord.","7":"The Lord is king, the most high over all the earth.","pentecost":"Lord, send out your Spirit, and renew the face of the earth."}},"solemnities":{"trinity":{"A":"Glory and praise for ever!","B":"Blessed the people the Lord has chosen to be his own.","C":"O Lord, our God, how wonderful your name in all the earth!"},"corpus_christi":{"A":"Praise the Lord, Jerusalem.","B":"I will take the cup of salvation, and call on the name of the Lord.","C":"You are a priest for ever, in the line of Melchizedek."},"holy_family":{"A":"Blessed are those who fear the Lord and walk in his ways.","B":"The Lord remembers his covenant for ever.","C":"Blessed are they who dwell in your house, O Lord."},"christmas2":"The Word became flesh, and made his dwelling among us.","epiphany":"Lord, every nation on earth will adore you.","baptism":"The Lord will bless his people with peace.","all_saints":"Lord, this is the people that longs to see your face."}};
+    function resolveLectionaryPsalmResponse(ev, litYearStr) {
       if (!ev) return '';
-      const readings = ev.readings || {};
-      if (readings.responsorial_psalm && readings.responsorial_psalm.trim()) {
-        return readings.responsorial_psalm.trim();
-      }
-
+      const ps = LECTIONARY_PSALM_RESPONSES || {};
       const y = (litYearStr && litYearStr.includes('B')) ? 'B' : ((litYearStr && litYearStr.includes('C')) ? 'C' : 'A');
-      const key = ev.event_key || '';
+      const evKey = (ev.event_key || '').toLowerCase();
       const name = (ev.name || '').toLowerCase();
 
-      // Ordinary time
-      let m = key.match(/OrdSunday(\d+)/i) || name.match(/(\d+)(?:st|nd|rd|th)?\s+sunday\s+of\s+ordinary\s+time/i);
+      // 1. Ordinary time
+      let m = evKey.match(/ordsunday(\d+)/i) || name.match(/(\d+)(?:st|nd|rd|th)?\s+sunday\s+(?:in|of)\s+ordinary\s+time/i);
       if (m) {
-        const w = parseInt(m[1], 10);
-        return (LECTIONARY_PSALMS.ordinary[y] && LECTIONARY_PSALMS.ordinary[y][w]) || '';
+        const w = String(parseInt(m[1], 10));
+        return (ps.ordinary && ps.ordinary[y] && ps.ordinary[y][w]) || '';
       }
 
-      // Christ the King
-      if (key.toLowerCase().includes('christking') || name.includes('christ the king')) {
-        return { A: '23', B: '93', C: '122' }[y] || '23';
+      // 2. Christ the King (34th Sunday in Ordinary Time)
+      if (evKey.includes('christking') || name.includes('christ the king') || name.includes('king of the universe')) {
+        return (ps.ordinary && ps.ordinary[y] && ps.ordinary[y]['34']) || '';
       }
 
-      // Trinity
-      if (key.toLowerCase().includes('trinity') || name.includes('trinity')) {
-        return { A: 'Daniel 3', B: '33', C: '8' }[y] || '33';
+      // 3. Trinity
+      if (evKey.includes('trinity') || name.includes('trinity')) {
+        return (ps.solemnities && ps.solemnities.trinity && ps.solemnities.trinity[y]) || '';
       }
 
-      // Corpus Christi
-      if (key.toLowerCase().includes('corpuschristi') || name.includes('body and blood')) {
-        return { A: '147', B: '116', C: '110' }[y] || '116';
+      // 4. Corpus Christi
+      if (evKey.includes('corpuschristi') || name.includes('corpus christi') || name.includes('body and blood')) {
+        return (ps.solemnities && ps.solemnities.corpus_christi && ps.solemnities.corpus_christi[y]) || '';
       }
 
-      // Advent
-      m = key.match(/Advent(\d)/i) || name.match(/(first|second|third|fourth|1st|2nd|3rd|4th)\s+sunday\s+of\s+advent/i);
+      // 5. Holy Family
+      if (evKey.includes('holyfamily') || name.includes('holy family')) {
+        return (ps.solemnities && ps.solemnities.holy_family && ps.solemnities.holy_family[y]) || '';
+      }
+
+      // 6. Advent
+      m = evKey.match(/advent(\d)/i) || name.match(/(first|second|third|fourth|1st|2nd|3rd|4th|\d+)(?:st|nd|rd|th)?\s+sunday\s+of\s+advent/i);
       if (m) {
-        const wMap = { first: 1, '1st': 1, second: 2, '2nd': 2, third: 3, '3rd': 3, fourth: 4, '4th': 4 };
-        const w = parseInt(m[1], 10) || wMap[m[1].toLowerCase()] || 1;
-        return (LECTIONARY_PSALMS.advent[y] && LECTIONARY_PSALMS.advent[y][w]) || '';
+        const wMap = { first: '1', '1st': '1', second: '2', '2nd': '2', third: '3', '3rd': '3', fourth: '4', '4th': '4' };
+        const w = wMap[m[1].toLowerCase()] || String(parseInt(m[1], 10) || 1);
+        return (ps.advent && ps.advent[y] && ps.advent[y][w]) || '';
       }
 
-      // Lent
-      if (key.toLowerCase().includes('palmsun') || name.includes('palm sunday')) return '22';
-      m = key.match(/Lent(\d)/i) || name.match(/(first|second|third|fourth|fifth|1st|2nd|3rd|4th|5th)\s+sunday\s+of\s+lent/i);
+      // 7. Lent
+      if (evKey.includes('palmsun') || name.includes('palm sunday')) {
+        return (ps.lent && ps.lent[y] && ps.lent[y]['palm']) || '';
+      }
+      m = evKey.match(/lent(\d)/i) || name.match(/(first|second|third|fourth|fifth|1st|2nd|3rd|4th|5th|\d+)(?:st|nd|rd|th)?\s+sunday\s+of\s+lent/i);
       if (m) {
-        const wMap = { first: 1, '1st': 1, second: 2, '2nd': 2, third: 3, '3rd': 3, fourth: 4, '4th': 4, fifth: 5, '5th': 5 };
-        const w = parseInt(m[1], 10) || wMap[m[1].toLowerCase()] || 1;
-        return (LECTIONARY_PSALMS.lent[y] && LECTIONARY_PSALMS.lent[y][w]) || '';
+        const wMap = { first: '1', '1st': '1', second: '2', '2nd': '2', third: '3', '3rd': '3', fourth: '4', '4th': '4', fifth: '5', '5th': '5' };
+        const w = wMap[m[1].toLowerCase()] || String(parseInt(m[1], 10) || 1);
+        return (ps.lent && ps.lent[y] && ps.lent[y][w]) || '';
       }
 
-      // Easter
-      if (key.toLowerCase() === 'easter' || name === 'easter sunday') return '118';
-      if (key.toLowerCase().includes('pentecost') || name.includes('pentecost')) return '104';
-      if (key.toLowerCase().includes('ascension') || name.includes('ascension')) return '47';
-      m = key.match(/Easter(\d)/i) || name.match(/(second|third|fourth|fifth|sixth|seventh|2nd|3rd|4th|5th|6th|7th)\s+sunday\s+of\s+easter/i);
+      // 8. Easter
+      if (evKey === 'easter' || name === 'easter sunday' || name === 'easter') {
+        return (ps.easter && ps.easter[y] && ps.easter[y]['1']) || '';
+      }
+      if (evKey.includes('ascension') || name.includes('ascension')) {
+        return (ps.easter && ps.easter[y] && ps.easter[y]['ascension']) || '';
+      }
+      if (evKey.includes('pentecost') || name.includes('pentecost')) {
+        return (ps.easter && ps.easter[y] && ps.easter[y]['pentecost']) || '';
+      }
+      m = evKey.match(/easter(\d)/i) || name.match(/(second|third|fourth|fifth|sixth|seventh|2nd|3rd|4th|5th|6th|7th|\d+)(?:st|nd|rd|th)?\s+sunday\s+of\s+easter/i);
       if (m) {
-        const wMap = { second: 2, '2nd': 2, third: 3, '3rd': 3, fourth: 4, '4th': 4, fifth: 5, '5th': 5, sixth: 6, '6th': 6, seventh: 7, '7th': 7 };
-        const w = parseInt(m[1], 10) || wMap[m[1].toLowerCase()] || 2;
-        return (LECTIONARY_PSALMS.easter[y] && LECTIONARY_PSALMS.easter[y][w]) || '';
+        const wMap = { second: '2', '2nd': '2', third: '3', '3rd': '3', fourth: '4', '4th': '4', fifth: '5', '5th': '5', sixth: '6', '6th': '6', seventh: '7', '7th': '7' };
+        const w = wMap[m[1].toLowerCase()] || String(parseInt(m[1], 10) || 2);
+        return (ps.easter && ps.easter[y] && ps.easter[y][w]) || '';
       }
 
       // Feasts
-      if (key.toLowerCase().includes('holyfamily') || name.includes('holy family')) return { A: '128', B: '105', C: '84' }[y] || '128';
-      if (key.toLowerCase().includes('christmas2') || name.includes('2nd sunday after christmas')) return '147';
-      if (key.toLowerCase().includes('epiphany') || name.includes('epiphany')) return '72';
-      if (key.toLowerCase().includes('baptism') || name.includes('baptism')) return '29';
-      if (key.toLowerCase().includes('allsaints') || name.includes('all saints')) return '24';
-      if (key.toLowerCase().includes('assumption') || name.includes('assumption')) return '45';
-      if (name.includes('peter') && name.includes('paul')) return '34';
+      const feasts = ['christmas2', 'epiphany', 'baptism', 'all_saints'];
+      for (const f of feasts) {
+        if (evKey.includes(f) || name.includes(f.replace('_', ' '))) {
+          return (ps.solemnities && ps.solemnities[f]) || '';
+        }
+      }
 
       return '';
     }
@@ -1381,7 +1352,7 @@
         litYear = cycles[cycleYear % 3];
       }
 
-      const psalm = resolveLectionaryPsalm(ev, litYear);
+      const psalm = resolveLectionaryPsalmResponse(ev, litYear);
 
       return {
         name: ev.name,
@@ -1410,7 +1381,7 @@
         }
         if (psalmElem) {
           if (info.psalm) {
-            const clean = info.psalm.replace(/^Psalm\s*/i, '').trim();
+            const clean = info.psalm.replace(/^Psalm\s*[:\-]?\s*/i, '').trim();
             psalmElem.textContent = `Psalm: ${clean}`;
             psalmElem.style.display = 'block';
           } else {
@@ -1442,7 +1413,7 @@
     const toastMsg = document.getElementById('toastMsg');
     let activePreviewTab = 'human';
 
-    // Load Hymn Catalog
+    // Load Hymn Catalog and Psalms Dataset
     async function loadCatalog() {
       try {
         const res = await fetch('hymns.json');
@@ -1452,13 +1423,16 @@
       } catch (e) {
         console.warn('Could not load hymns.json directly, using fallback', e);
       }
-      if (state.liturgicalInfo && massDateInput.value) {
-        state.suggestedHymns = {
-          entrance: getSuggestedHymns('entrance', state.liturgicalInfo, massDateInput.value),
-          offertory: getSuggestedHymns('offertory', state.liturgicalInfo, massDateInput.value),
-          communion: getSuggestedHymns('communion', state.liturgicalInfo, massDateInput.value),
-          recessional: getSuggestedHymns('recessional', state.liturgicalInfo, massDateInput.value)
-        };
+      try {
+        const pRes = await fetch('psalms.json');
+        if (pRes.ok) {
+          LECTIONARY_PSALM_RESPONSES = await pRes.json();
+        }
+      } catch (e) {
+        console.warn('Could not load psalms.json directly, using fallback', e);
+      }
+      if (massDateInput.value) {
+        await updateLiturgicalSuggestions(massDateInput.value);
       }
       renderAll();
     }
@@ -1852,6 +1826,9 @@
       });
 
       if (state.recessional) lines.push(`recessional;${state.recessional}`);
+      if (state.liturgicalInfo && state.liturgicalInfo.psalm) {
+        lines.push(`response;${state.liturgicalInfo.psalm.replace(/^Psalm\s*[:\-]?\s*/i, '').trim()}`);
+      }
       lines.push(';');
       lines.push(`mass;${state.massSetting}`);
       return lines.join('\n');

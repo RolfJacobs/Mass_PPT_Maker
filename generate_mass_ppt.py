@@ -96,72 +96,200 @@ def get_upcoming_sunday(dt=None):
     return dt + datetime.timedelta(days=days_ahead)
 
 
+def get_liturgical_cycle_letter(target_date):
+    """Calculates liturgical cycle (Year A, B, or C) for a given date."""
+    year = target_date.year
+    # Find 1st Sunday of Advent (Sunday between Nov 27 and Dec 3)
+    advent_1 = None
+    for d in range(27, 31):
+        dt = datetime.date(year, 11, d)
+        if dt.weekday() == 6:
+            advent_1 = dt
+            break
+    if not advent_1:
+        for d in range(1, 4):
+            dt = datetime.date(year, 12, d)
+            if dt.weekday() == 6:
+                advent_1 = dt
+                break
+    cycle_year = year + 1 if (advent_1 and target_date >= advent_1) else year
+    cycles = {1: 'A', 2: 'B', 0: 'C'}
+    return cycles[cycle_year % 3]
+
+
+def resolve_lectionary_psalm_response(title, target_date=None, event_key=''):
+    """
+    Looks up the Responsorial Psalm refrain text from webapp/psalms.json.
+    Matches the exact dataset and resolution logic used by the webapp.
+    """
+    json_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'webapp', 'psalms.json')
+    if not os.path.exists(json_path):
+        json_path = 'webapp/psalms.json'
+    if not os.path.exists(json_path):
+        return None
+
+    try:
+        with open(json_path, 'r', encoding='utf-8') as f:
+            ps = json.load(f)
+    except Exception:
+        return None
+
+    y = get_liturgical_cycle_letter(target_date) if target_date else 'A'
+    ev_k = (event_key or '').lower()
+    nm = (title or '').lower()
+
+    # 1. Ordinary Sunday
+    m = re.search(r'ordsunday(\d+)', ev_k) or re.search(r'(\d+)(?:st|nd|rd|th)?\s+sunday\s+(?:in|of)\s+ordinary\s+time', nm)
+    if m:
+        w = str(int(m.group(1)))
+        return ps.get('ordinary', {}).get(y, {}).get(w)
+
+    # 2. Christ the King (34th Sunday in Ordinary Time)
+    if 'christking' in ev_k or 'christ the king' in nm or 'king of the universe' in nm:
+        return ps.get('ordinary', {}).get(y, {}).get('34')
+
+    # 3. Trinity
+    if 'trinity' in ev_k or 'trinity' in nm:
+        return ps.get('solemnities', {}).get('trinity', {}).get(y)
+
+    # 4. Corpus Christi
+    if 'corpuschristi' in ev_k or 'corpus christi' in nm or 'body and blood' in nm:
+        return ps.get('solemnities', {}).get('corpus_christi', {}).get(y)
+
+    # 5. Holy Family
+    if 'holyfamily' in ev_k or 'holy family' in nm:
+        return ps.get('solemnities', {}).get('holy_family', {}).get(y)
+
+    # 6. Advent
+    m = re.search(r'advent(\d)', ev_k) or re.search(r'(first|second|third|fourth|1st|2nd|3rd|4th|\d+)(?:st|nd|rd|th)?\s+sunday\s+of\s+advent', nm)
+    if m:
+        wMap = {'first': '1', '1st': '1', second: '2', '2nd': '2', third: '3', '3rd': '3', fourth: '4', '4th': '4'}
+        w = wMap.get(m.group(1).lower(), m.group(1))
+        return ps.get('advent', {}).get(y, {}).get(w)
+
+    # 7. Lent
+    if 'palmsun' in ev_k or 'palm sunday' in nm:
+        return ps.get('lent', {}).get(y, {}).get('palm')
+    m = re.search(r'lent(\d)', ev_k) or re.search(r'(first|second|third|fourth|fifth|1st|2nd|3rd|4th|5th|\d+)(?:st|nd|rd|th)?\s+sunday\s+of\s+lent', nm)
+    if m:
+        wMap = {'first': '1', '1st': '1', second: '2', '2nd': '2', third: '3', '3rd': '3', fourth: '4', '4th': '4', fifth: '5', '5th': '5'}
+        w = wMap.get(m.group(1).lower(), m.group(1))
+        return ps.get('lent', {}).get(y, {}).get(w)
+
+    # 8. Easter
+    if ev_k == 'easter' or 'easter sunday' in nm or nm == 'easter':
+        return ps.get('easter', {}).get(y, {}).get('1')
+    if 'ascension' in ev_k or 'ascension' in nm:
+        return ps.get('easter', {}).get(y, {}).get('ascension')
+    if 'pentecost' in ev_k or 'pentecost' in nm:
+        return ps.get('easter', {}).get(y, {}).get('pentecost')
+    m = re.search(r'easter(\d)', ev_k) or re.search(r'(second|third|fourth|fifth|sixth|seventh|2nd|3rd|4th|5th|6th|7th|\d+)(?:st|nd|rd|th)?\s+sunday\s+of\s+easter', nm)
+    if m:
+        wMap = {'second': '2', '2nd': '2', third: '3', '3rd': '3', fourth: '4', '4th': '4', fifth: '5', '5th': '5', sixth: '6', '6th': '6', seventh: '7', '7th': '7'}
+        w = wMap.get(m.group(1).lower(), m.group(1))
+        return ps.get('easter', {}).get(y, {}).get(w)
+
+    # Solemnities and feasts
+    for s_key in ['christmas2', 'epiphany', 'baptism', 'all_saints']:
+        if s_key in ev_k or s_key.replace('_', ' ') in nm or s_key in nm:
+            return ps.get('solemnities', {}).get(s_key)
+
+    return None
+
+
 def fetch_liturgical_info(target_date):
     """
     Fetches the Catholic liturgical title and Responsorial Psalm response
     for target_date (Roman Rite).
+    Uses the shared lectionary dataset first, and falls back to CatholicReadings.org.
     """
     year, month, day = target_date.year, target_date.month, target_date.day
     title = None
+    event_key = ''
     response_text = None
 
-    # 1. Fetch celebration title from calapi (Roman Calendar API)
-    cal_url = f"http://calapi.inadiutorium.cz/api/v0/en/calendars/default/{year}/{month:02d}/{day:02d}"
+    # 1. Fetch celebration title (try LitCal first to match webapp, then Calapi)
+    litcal_url = f"https://litcal.johnromanodorazio.com/api/v5/calendar?year={year}&locale=en"
     try:
-        req = urllib.request.Request(cal_url, headers={'User-Agent': 'Mozilla/5.0'})
-        with urllib.request.urlopen(req, timeout=5) as resp:
+        req = urllib.request.Request(litcal_url, headers={'User-Agent': 'Mozilla/5.0'})
+        with urllib.request.urlopen(req, timeout=4) as resp:
             data = json.loads(resp.read().decode())
-            if data.get('celebrations'):
-                title = data['celebrations'][0].get('title')
-    except Exception as e:
-        print(f"[Warning] Failed to fetch calendar from calapi: {e}")
+            events = data.get('litcal', [])
+            date_prefix = f"{year}-{month:02d}-{day:02d}"
+            ev = next((e for e in events if e.get('date', '').startswith(date_prefix)), None)
+            if ev:
+                title = ev.get('name')
+                event_key = ev.get('event_key', '')
+    except Exception:
+        pass
+
+    if not title:
+        cal_url = f"http://calapi.inadiutorium.cz/api/v0/en/calendars/default/{year}/{month:02d}/{day:02d}"
+        try:
+            req = urllib.request.Request(cal_url, headers={'User-Agent': 'Mozilla/5.0'})
+            with urllib.request.urlopen(req, timeout=4) as resp:
+                data = json.loads(resp.read().decode())
+                if data.get('celebrations'):
+                    title = data['celebrations'][0].get('title')
+        except Exception as e:
+            print(f"[Warning] Failed to fetch calendar from calapi: {e}")
 
     # Fallback title if None
     if not title:
         title = "27th Sunday in Ordinary Time"
 
-    # 2. Fetch Responsorial Psalm Refrain from CatholicReadings
-    ord_map = {
-        '1st': 'first', '2nd': 'second', '3rd': 'third', '4th': 'fourth', '5th': 'fifth',
-        '6th': 'sixth', '7th': 'seventh', '8th': 'eighth', '9th': 'ninth', '10th': 'tenth',
-        '11th': 'eleventh', '12th': 'twelfth', '13th': 'thirteenth', '14th': 'fourteenth', '15th': 'fifteenth',
-        '16th': 'sixteenth', '17th': 'seventeenth', '18th': 'eighteenth', '19th': 'nineteenth', '20th': 'twentieth',
-        '21st': 'twenty-first', '22nd': 'twenty-second', '23rd': 'twenty-third', '24th': 'twenty-fourth',
-        '25th': 'twenty-fifth', '26th': 'twenty-sixth', '27th': 'twenty-seventh', '28th': 'twenty-eighth',
-        '29th': 'twenty-ninth', '30th': 'thirtieth', '31st': 'thirty-first', '32nd': 'thirty-second', '33rd': 'thirty-third'
-    }
-    clean_title = title.lower()
-    for k, v in ord_map.items():
-        if k in clean_title:
-            clean_title = clean_title.replace(k, v)
-            break
-    slug = re.sub(r'[^a-z0-9]+', '-', clean_title).strip('-')
+    # 2. Responsorial Psalm Refrain from shared lectionary database (webapp/psalms.json)
+    response_text = resolve_lectionary_psalm_response(title, target_date, event_key)
 
-    slug_candidates = [
-        f"{slug}-year-a",
-        f"{slug}-year-b",
-        f"{slug}-year-c",
-        slug
-    ]
+    # 3. If not in local dataset, fall back to online CatholicReadings.org scrape
+    if not response_text:
+        ord_map = [
+            (r'\b33rd\b', 'thirty-third'), (r'\b32nd\b', 'thirty-second'), (r'\b31st\b', 'thirty-first'),
+            (r'\b30th\b', 'thirtieth'), (r'\b29th\b', 'twenty-ninth'), (r'\b28th\b', 'twenty-eighth'),
+            (r'\b27th\b', 'twenty-seventh'), (r'\b26th\b', 'twenty-sixth'), (r'\b25th\b', 'twenty-fifth'),
+            (r'\b24th\b', 'twenty-fourth'), (r'\b23rd\b', 'twenty-third'), (r'\b22nd\b', 'twenty-second'),
+            (r'\b21st\b', 'twenty-first'), (r'\b20th\b', 'twentieth'), (r'\b19th\b', 'nineteenth'),
+            (r'\b18th\b', 'eighteenth'), (r'\b17th\b', 'seventeenth'), (r'\b16th\b', 'sixteenth'),
+            (r'\b15th\b', 'fifteenth'), (r'\b14th\b', 'fourteenth'), (r'\b13th\b', 'thirteenth'),
+            (r'\b12th\b', 'twelfth'), (r'\b11th\b', 'eleventh'), (r'\b10th\b', 'tenth'),
+            (r'\b9th\b', 'ninth'), (r'\b8th\b', 'eighth'), (r'\b7th\b', 'seventh'),
+            (r'\b6th\b', 'sixth'), (r'\b5th\b', 'fifth'), (r'\b4th\b', 'fourth'),
+            (r'\b3rd\b', 'third'), (r'\b2nd\b', 'second'), (r'\b1st\b', 'first')
+        ]
+        clean_title = title.lower()
+        for pat, word in ord_map:
+            clean_title = re.sub(pat, word, clean_title)
+        slug = re.sub(r'[^a-z0-9]+', '-', clean_title).strip('-')
 
-    for sc in slug_candidates:
-        url = f"https://catholicreadings.org/{sc}/"
-        try:
-            req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'})
-            with urllib.request.urlopen(req, timeout=6) as resp:
-                soup = BeautifulSoup(resp.read(), 'html.parser')
-                for tag in soup.find_all(['strong', 'p']):
-                    t = tag.get_text().strip()
-                    if t.startswith('R.') or t.startswith('R '):
-                        cleaned = re.sub(r'^R\.?\s*(?:\([^)]*\))?\s*', '', t).strip()
-                        first_line = cleaned.splitlines()[0].strip()
-                        if len(first_line) > 5:
-                            response_text = first_line
-                            break
-                if response_text:
-                    break
-        except Exception:
-            pass
+        slug_candidates = [
+            f"{slug}-year-a",
+            f"{slug}-year-b",
+            f"{slug}-year-c",
+            slug
+        ]
+
+        import gzip
+        for sc in slug_candidates:
+            url = f"https://catholicreadings.org/{sc}/"
+            try:
+                req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'})
+                with urllib.request.urlopen(req, timeout=6) as resp:
+                    raw_bytes = resp.read()
+                    if raw_bytes[:2] == b'\x1f\x8b':
+                        raw_bytes = gzip.decompress(raw_bytes)
+                    soup = BeautifulSoup(raw_bytes.decode('utf-8', errors='ignore'), 'html.parser')
+                    for tag in soup.find_all(['strong', 'p']):
+                        t = tag.get_text().strip()
+                        if t.startswith('R.') or t.startswith('R '):
+                            cleaned = re.sub(r'^R\.?\s*(?:\([^)]*\))?\s*', '', t).strip()
+                            first_line = cleaned.splitlines()[0].strip()
+                            if len(first_line) > 5:
+                                response_text = first_line
+                                break
+                    if response_text:
+                        break
+            except Exception:
+                pass
 
     return title, response_text
 
@@ -205,6 +333,12 @@ def parse_setup_csv(csv_path_or_text):
             key, val = parts[0].lower(), parts[1]
             if key == 'mass':
                 hymns['mass_setting'] = val
+                continue
+            if key in ('response', 'psalm', 'psalm_response'):
+                hymns['response'] = val
+                continue
+            if key in ('title', 'celebration', 'celebration_title'):
+                hymns['celebration_title'] = val
                 continue
             if key in ('entrance', 'entrance_hymn'):
                 hymns['entrance_hymn'] = val
@@ -696,6 +830,14 @@ def generate_presentation(csv_path, template_path, output_path, title_text=None,
     hymn_setup = parse_setup_csv(csv_path)
     for k, v in hymn_setup.items():
         print(f"  {k}: {v}")
+
+    # Allow CSV / setup message to supply response refrain or celebration title
+    if hymn_setup.get('response'):
+        response_text = hymn_setup['response']
+        print(f"Overriding Psalm Response Refrain from CSV: {response_text}")
+    if hymn_setup.get('celebration_title'):
+        title_text = hymn_setup['celebration_title']
+        print(f"Overriding Liturgical Title from CSV: {title_text}")
 
     raw_mass = hymn_setup.get('mass_setting', 'Mass of Renew')
     mass_folder = resolve_mass_setting(raw_mass)
