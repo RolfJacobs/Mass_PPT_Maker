@@ -1046,46 +1046,130 @@
     // Pre-vetted hymn pools strictly from HYMN_CATALOG
     const LITURGICAL_HYMN_POOLS = {
       advent: {
-        entrance: ['o_come_o_come_emmanuel', 'come_lord_jesus_come', 'on_jordans_bank_the_baptist_cry'],
-        offertory: ['gifts_of_bread_and_wine', 'all_that_i_am_all_that_i_do', 'take_our_bread'],
-        communion: ['i_am_the_bread_of_life_toolan', 'as_the_deer', 'one_bread_one_body'],
-        recessional: ['tell_out_my_soul', 'come_lord_jesus_come', 'walk_with_me_oh_my_lord']
+        entrance: [
+          'o_come_o_come_emmanuel', 'come_lord_jesus_come', 'on_jordans_bank_the_baptist_cry',
+          'light_the_advent_candle_1', 'light_the_advent_candle_2'
+        ],
+        offertory: [
+          'gifts_of_bread_and_wine', 'all_that_i_am_all_that_i_do', 'take_our_bread',
+          'in_bread_we_bring_you_lord', 'lord_accept_the_gifts_we_offer'
+        ],
+        communion: [
+          'i_am_the_bread_of_life_toolan', 'as_the_deer', 'one_bread_one_body',
+          'sweet_sacrement_divine', 'soul_of_my_saviour'
+        ],
+        recessional: [
+          'tell_out_my_soul', 'come_lord_jesus_come', 'walk_with_me_oh_my_lord',
+          'shine_jesus_shine', 'now_thank_we_all_our_god'
+        ]
       },
       christmas: {
-        entrance: ['o_come_all_ye_faithful', 'hark_the_herald_angels_song', 'once_in_royal_davids_city'],
-        offertory: ['what_child_is_this', 'gifts_of_bread_and_wine', 'take_our_bread'],
-        communion: ['away_in_a_manger', 'silent_night', 'one_bread_one_body'],
-        recessional: ['joy_to_the_world', 'ding_dong_merrily_on_high', 'go_tell_it_on_the_mountains']
+        entrance: [
+          'o_come_all_ye_faithful', 'hark_the_herald_angels_song', 'once_in_royal_davids_city',
+          'angels_we_have_heard_in_heaven', 'o_little_town_of_bethlehem'
+        ],
+        offertory: [
+          'what_child_is_this', 'gifts_of_bread_and_wine', 'take_our_bread',
+          'in_bread_we_bring_you_lord', 'all_that_i_am_all_that_i_do'
+        ],
+        communion: [
+          'away_in_a_manger', 'silent_night', 'one_bread_one_body',
+          'o_holy_night', 'sweet_sacrement_divine'
+        ],
+        recessional: [
+          'joy_to_the_world', 'ding_dong_merrily_on_high', 'go_tell_it_on_the_mountains',
+          'while_shepherds_watched_their_flocks_by_night', 'angles_we_have_heard_on_high'
+        ]
       },
       lent: {
-        entrance: ['fourty_days_and_fourty_nights', 'god_of_mercy_and_compassion', 'when_i_survey_the_wondrous_cross'],
-        offertory: ['what_can_we_offer_you_lord_our_god', 'all_that_i_am_all_that_i_do', 'take_our_bread'],
-        communion: ['soul_of_my_saviour', 'sweet_sacrement_divine', 'this_is_my_body_broken_for_you'],
-        recessional: ['at_the_cross_her_station_keeping', 'old_rugged_cross', 'reproaches']
+        entrance: [
+          'fourty_days_and_fourty_nights', 'god_of_mercy_and_compassion', 'when_i_survey_the_wondrous_cross',
+          'at_the_cross_her_station_keeping', 'old_rugged_cross'
+        ],
+        offertory: [
+          'what_can_we_offer_you_lord_our_god', 'all_that_i_am_all_that_i_do', 'take_our_bread',
+          'in_bread_we_bring_you_lord', 'gifts_of_bread_and_wine'
+        ],
+        communion: [
+          'soul_of_my_saviour', 'sweet_sacrement_divine', 'this_is_my_body_broken_for_you',
+          'one_bread_one_body', 'o_bread_of_heaven'
+        ],
+        recessional: [
+          'at_the_cross_her_station_keeping', 'old_rugged_cross', 'reproaches',
+          'when_i_survey_the_wondrous_cross', 'you_shall_cross_the_barren_desert'
+        ]
       },
       easter: {
-        entrance: ['jesus_christ_is_risen_today', 'alleluia_sing_to_jesus', 'sing_to_the_mountains'],
-        offertory: ['in_bread_we_bring_you_lord', 'take_our_bread', 'gifts_of_bread_and_wine'],
-        communion: ['one_bread_one_body', 'i_am_the_bread_of_life_toolan', 'as_the_deer'],
-        recessional: ['we_are_the_easter_people', 'now_thank_we_all_our_god', 'to_god_be_the_glory']
+        entrance: [
+          'jesus_christ_is_risen_today', 'alleluia_sing_to_jesus', 'sing_to_the_mountains',
+          'we_are_the_easter_people', 'praise_to_the_lord_the_almighty'
+        ],
+        offertory: [
+          'in_bread_we_bring_you_lord', 'take_our_bread', 'gifts_of_bread_and_wine',
+          'all_that_i_am_all_that_i_do', 'lord_accept_the_gifts_we_offer'
+        ],
+        communion: [
+          'one_bread_one_body', 'i_am_the_bread_of_life_toolan', 'as_the_deer',
+          'soul_of_my_saviour', 'sweet_sacrement_divine'
+        ],
+        recessional: [
+          'we_are_the_easter_people', 'now_thank_we_all_our_god', 'to_god_be_the_glory',
+          'shine_jesus_shine', 'sing_it_in_the_valleys'
+        ]
       },
       pentecost: {
-        entrance: ['come_holy_ghost_creator_come', 'spirit_of_god_in_the_clear_running_water', 'holy_spirit_lord_of_light'],
-        offertory: ['take_our_bread', 'gifts_of_bread_and_wine', 'in_bread_we_bring_you_lord'],
-        communion: ['as_the_deer', 'sweet_sacrement_divine', 'one_bread_one_body'],
-        recessional: ['shine_jesus_shine', 'sing_it_in_the_valleys', 'go_the_mass_is_ended']
+        entrance: [
+          'come_holy_ghost_creator_come', 'spirit_of_god_in_the_clear_running_water', 'holy_spirit_lord_of_light',
+          'breathe_on_me_breath_of_god_PW', 'gods_spirit_is_in_my_heart'
+        ],
+        offertory: [
+          'take_our_bread', 'gifts_of_bread_and_wine', 'in_bread_we_bring_you_lord',
+          'all_that_i_am_all_that_i_do', 'lord_accept_the_gifts_we_offer'
+        ],
+        communion: [
+          'as_the_deer', 'sweet_sacrement_divine', 'one_bread_one_body',
+          'i_am_the_bread_of_life_toolan', 'soul_of_my_saviour'
+        ],
+        recessional: [
+          'shine_jesus_shine', 'sing_it_in_the_valleys', 'go_the_mass_is_ended',
+          'the_spirit_lives_to_set_us_free', 'we_are_one_in_the_spirit'
+        ]
       },
       marian: {
-        entrance: ['hail_queen_of_heaven', 'immaculate_mary', 'as_i_kneel_before_you'],
-        offertory: ['all_that_i_am_all_that_i_do', 'gifts_of_bread_and_wine', 'take_our_bread'],
-        communion: ['soul_of_my_saviour', 'one_bread_one_body', 'as_the_deer'],
-        recessional: ['daily_daily_sing_to_mary', 'hail_queen_of_heaven', 'immaculate_mary']
+        entrance: [
+          'hail_queen_of_heaven', 'immaculate_mary', 'as_i_kneel_before_you',
+          'ave_maria_oh_maiden_oh_mother', 'holy_virgin_by_gods_decree'
+        ],
+        offertory: [
+          'all_that_i_am_all_that_i_do', 'gifts_of_bread_and_wine', 'take_our_bread',
+          'in_bread_we_bring_you_lord', 'lord_accept_the_gifts_we_offer'
+        ],
+        communion: [
+          'soul_of_my_saviour', 'one_bread_one_body', 'as_the_deer',
+          'sweet_sacrement_divine', 'o_bread_of_heaven'
+        ],
+        recessional: [
+          'daily_daily_sing_to_mary', 'hail_queen_of_heaven', 'immaculate_mary',
+          'ill_sing_a_hymn_to_mary', 'tell_out_my_soul'
+        ]
       },
       christ_king: {
-        entrance: ['hail_redeemer_king_divine', 'crown_him_with_many_crowns', 'all_hail_the_power_of_Jesus_name'],
-        offertory: ['take_our_bread', 'in_bread_we_bring_you_lord', 'all_that_i_am_all_that_i_do'],
-        communion: ['one_bread_one_body', 'sweet_sacrement_divine', 'i_am_the_bread_of_life_toolan'],
-        recessional: ['to_god_be_the_glory', 'how_great_is_our_god', 'majesty']
+        entrance: [
+          'hail_redeemer_king_divine', 'crown_him_with_many_crowns', 'all_hail_the_power_of_Jesus_name',
+          'praise_my_soul_the_king_of_heaven', 'jesus_we_enthrone_you'
+        ],
+        offertory: [
+          'take_our_bread', 'in_bread_we_bring_you_lord', 'all_that_i_am_all_that_i_do',
+          'gifts_of_bread_and_wine', 'lord_accept_the_gifts_we_offer'
+        ],
+        communion: [
+          'one_bread_one_body', 'sweet_sacrement_divine', 'i_am_the_bread_of_life_toolan',
+          'as_the_deer', 'soul_of_my_saviour'
+        ],
+        recessional: [
+          'to_god_be_the_glory', 'how_great_is_our_god', 'majesty',
+          'our_god_reigns', 'now_thank_we_all_our_god'
+        ]
       },
       ordinary: {
         entrance: [
@@ -1131,12 +1215,13 @@
         const d = new Date(dateStr + 'T12:00:00');
         const weekNum = Math.floor(d.getTime() / (7 * 24 * 3600 * 1000));
         const offset = { entrance: 0, offertory: 1, communion: 2, recessional: 3 }[section] || 0;
+        const count = Math.min(5, rawList.length);
         const baseIdx = (weekNum + offset) % rawList.length;
-        for (let i = 0; i < 3; i++) {
+        for (let i = 0; i < count; i++) {
           selectedIds.push(rawList[(baseIdx + i) % rawList.length]);
         }
       } else {
-        selectedIds = rawList.slice(0, 3);
+        selectedIds = rawList.slice(0, 5);
       }
 
       return selectedIds.map(id => HYMN_CATALOG.find(h => h.id === id)).filter(Boolean);
