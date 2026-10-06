@@ -413,6 +413,44 @@
       margin-top: 2px;
     }
 
+    .dropdown-section-header {
+      padding: 8px 14px 4px 14px;
+      font-size: 0.68rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--accent);
+      user-select: none;
+    }
+
+    .dropdown-section-divider {
+      padding: 8px 14px 4px 14px;
+      font-size: 0.68rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-muted);
+      border-top: 1px solid var(--dropdown-item-border);
+      margin-top: 4px;
+      user-select: none;
+    }
+
+    .suggested-star {
+      display: inline-block;
+      margin-right: 4px;
+      font-size: 0.85rem;
+      vertical-align: middle;
+    }
+
+    .suggested-tag {
+      font-size: 0.68rem;
+      font-weight: 600;
+      color: var(--accent);
+      background: var(--custom-tag-bg);
+      padding: 1px 6px;
+      border-radius: 4px;
+    }
+
     .add-custom-item {
       background: var(--custom-tag-bg);
       color: var(--custom-tag-text);
@@ -775,6 +813,7 @@
       <div>
         <div class="date-label">Sunday Mass</div>
         <div id="dateHuman" style="font-weight: 700; font-size: 0.95rem; color: var(--primary);">Upcoming Sunday</div>
+        <div id="liturgicalTitle" style="font-size: 0.8rem; color: var(--accent); font-weight: 600; margin-top: 2px; display: none;"></div>
       </div>
       <input type="date" id="massDate" class="date-input">
     </div>
@@ -994,8 +1033,174 @@
       recessional: 'go_the_mass_is_ended',
       massSetting: localStorage.getItem('mass_setting') || DEFAULT_MASS_SETTING,
       phone: localStorage.getItem('mass_recipient_phone') || DEFAULT_PHONE,
-      theme: localStorage.getItem('mass_theme') || 'system'
+      theme: localStorage.getItem('mass_theme') || 'system',
+      liturgicalInfo: null,
+      suggestedHymns: {
+        entrance: [],
+        offertory: [],
+        communion: [],
+        recessional: []
+      }
     };
+
+    // Pre-vetted hymn pools strictly from HYMN_CATALOG
+    const LITURGICAL_HYMN_POOLS = {
+      advent: {
+        entrance: ['o_come_o_come_emmanuel', 'come_lord_jesus_come', 'on_jordans_bank_the_baptist_cry'],
+        offertory: ['gifts_of_bread_and_wine', 'all_that_i_am_all_that_i_do', 'take_our_bread'],
+        communion: ['i_am_the_bread_of_life_toolan', 'as_the_deer', 'one_bread_one_body'],
+        recessional: ['tell_out_my_soul', 'come_lord_jesus_come', 'walk_with_me_oh_my_lord']
+      },
+      christmas: {
+        entrance: ['o_come_all_ye_faithful', 'hark_the_herald_angels_song', 'once_in_royal_davids_city'],
+        offertory: ['what_child_is_this', 'gifts_of_bread_and_wine', 'take_our_bread'],
+        communion: ['away_in_a_manger', 'silent_night', 'one_bread_one_body'],
+        recessional: ['joy_to_the_world', 'ding_dong_merrily_on_high', 'go_tell_it_on_the_mountains']
+      },
+      lent: {
+        entrance: ['fourty_days_and_fourty_nights', 'god_of_mercy_and_compassion', 'when_i_survey_the_wondrous_cross'],
+        offertory: ['what_can_we_offer_you_lord_our_god', 'all_that_i_am_all_that_i_do', 'take_our_bread'],
+        communion: ['soul_of_my_saviour', 'sweet_sacrement_divine', 'this_is_my_body_broken_for_you'],
+        recessional: ['at_the_cross_her_station_keeping', 'old_rugged_cross', 'reproaches']
+      },
+      easter: {
+        entrance: ['jesus_christ_is_risen_today', 'alleluia_sing_to_jesus', 'sing_to_the_mountains'],
+        offertory: ['in_bread_we_bring_you_lord', 'take_our_bread', 'gifts_of_bread_and_wine'],
+        communion: ['one_bread_one_body', 'i_am_the_bread_of_life_toolan', 'as_the_deer'],
+        recessional: ['we_are_the_easter_people', 'now_thank_we_all_our_god', 'to_god_be_the_glory']
+      },
+      pentecost: {
+        entrance: ['come_holy_ghost_creator_come', 'spirit_of_god_in_the_clear_running_water', 'holy_spirit_lord_of_light'],
+        offertory: ['take_our_bread', 'gifts_of_bread_and_wine', 'in_bread_we_bring_you_lord'],
+        communion: ['as_the_deer', 'sweet_sacrement_divine', 'one_bread_one_body'],
+        recessional: ['shine_jesus_shine', 'sing_it_in_the_valleys', 'go_the_mass_is_ended']
+      },
+      marian: {
+        entrance: ['hail_queen_of_heaven', 'immaculate_mary', 'as_i_kneel_before_you'],
+        offertory: ['all_that_i_am_all_that_i_do', 'gifts_of_bread_and_wine', 'take_our_bread'],
+        communion: ['soul_of_my_saviour', 'one_bread_one_body', 'as_the_deer'],
+        recessional: ['daily_daily_sing_to_mary', 'hail_queen_of_heaven', 'immaculate_mary']
+      },
+      christ_king: {
+        entrance: ['hail_redeemer_king_divine', 'crown_him_with_many_crowns', 'all_hail_the_power_of_Jesus_name'],
+        offertory: ['take_our_bread', 'in_bread_we_bring_you_lord', 'all_that_i_am_all_that_i_do'],
+        communion: ['one_bread_one_body', 'sweet_sacrement_divine', 'i_am_the_bread_of_life_toolan'],
+        recessional: ['to_god_be_the_glory', 'how_great_is_our_god', 'majesty']
+      },
+      ordinary: {
+        entrance: [
+          'the_churchs_one_foundation', 'praise_to_the_lord_the_almighty', 'all_people_that_on_earth_do_dwell',
+          'come_praise_the_lord_the_almighty', 'holy_god_we_praise_thy_name', 'sing_to_the_mountains',
+          'we_are_gethering_together_unto_him', 'all_creation_bless_the_lord', 'blessed_assurance'
+        ],
+        offertory: [
+          'take_our_bread', 'in_bread_we_bring_you_lord', 'gifts_of_bread_and_wine',
+          'all_that_i_am_all_that_i_do', 'lord_accept_the_gifts_we_offer', 'to_be_the_body_of_the_lord_in_this_world',
+          'what_can_we_offer_you_lord_our_god', 'father_i_place_into_your_hands'
+        ],
+        communion: [
+          'as_the_deer', 'one_bread_one_body', 'i_am_the_bread_of_life_toolan',
+          'soul_of_my_saviour', 'sweet_sacrement_divine', 'o_bread_of_heaven',
+          'this_is_my_body_broken_for_you', 'all_to_jesus_i_surrender', 'lay_your_hands'
+        ],
+        recessional: [
+          'go_the_mass_is_ended', 'now_thank_we_all_our_god', 'shine_jesus_shine',
+          'sing_it_in_the_valleys', 'tell_out_my_soul', 'to_god_be_the_glory',
+          'how_great_is_our_god', 'walk_with_me_oh_my_lord', 'we_are_one_in_the_spirit'
+        ]
+      }
+    };
+
+    function getSuggestedHymns(section, liturgicalInfo, dateStr) {
+      if (!liturgicalInfo) return [];
+      const name = (liturgicalInfo.name || '').toLowerCase();
+      const season = (liturgicalInfo.season || '').toUpperCase();
+
+      let poolObj = LITURGICAL_HYMN_POOLS.ordinary;
+      if (season === 'ADVENT') poolObj = LITURGICAL_HYMN_POOLS.advent;
+      else if (season === 'CHRISTMAS') poolObj = LITURGICAL_HYMN_POOLS.christmas;
+      else if (season === 'LENT') poolObj = LITURGICAL_HYMN_POOLS.lent;
+      else if (season === 'EASTER') poolObj = LITURGICAL_HYMN_POOLS.easter;
+      else if (name.includes('pentecost') || name.includes('holy spirit')) poolObj = LITURGICAL_HYMN_POOLS.pentecost;
+      else if (name.includes('mary') || name.includes('mother of god') || name.includes('assumption') || name.includes('immaculate')) poolObj = LITURGICAL_HYMN_POOLS.marian;
+      else if (name.includes('christ the king')) poolObj = LITURGICAL_HYMN_POOLS.christ_king;
+
+      const rawList = poolObj[section] || [];
+      let selectedIds = [];
+      if (poolObj === LITURGICAL_HYMN_POOLS.ordinary && dateStr) {
+        const d = new Date(dateStr + 'T12:00:00');
+        const weekNum = Math.floor(d.getTime() / (7 * 24 * 3600 * 1000));
+        const offset = { entrance: 0, offertory: 1, communion: 2, recessional: 3 }[section] || 0;
+        const baseIdx = (weekNum + offset) % rawList.length;
+        for (let i = 0; i < 3; i++) {
+          selectedIds.push(rawList[(baseIdx + i) % rawList.length]);
+        }
+      } else {
+        selectedIds = rawList.slice(0, 3);
+      }
+
+      return selectedIds.map(id => HYMN_CATALOG.find(h => h.id === id)).filter(Boolean);
+    }
+
+    const _litcalYearCache = {};
+
+    async function fetchLiturgicalCelebration(dateISO) {
+      if (!navigator.onLine) return null;
+      const [year] = dateISO.split('-');
+      if (!_litcalYearCache[year]) {
+        try {
+          const controller = new AbortController();
+          const timeoutId = setTimeout(() => controller.abort(), 3500);
+          const res = await fetch(`https://litcal.johnromanodorazio.com/api/v5/calendar?year=${year}&locale=en`, {
+            signal: controller.signal
+          });
+          clearTimeout(timeoutId);
+          if (res.ok) {
+            const data = await res.json();
+            _litcalYearCache[year] = data.litcal || [];
+          } else {
+            return null;
+          }
+        } catch (e) {
+          // Offline, timeout, or network issue - fail silently
+          return null;
+        }
+      }
+
+      const events = _litcalYearCache[year] || [];
+      const ev = events.find(e => e.date && e.date.startsWith(dateISO));
+      if (!ev) return null;
+
+      return {
+        name: ev.name,
+        season: ev.liturgical_season || '',
+        color: (ev.color && ev.color[0]) || 'green',
+        event_key: ev.event_key || '',
+        date: dateISO
+      };
+    }
+
+    async function updateLiturgicalSuggestions(dateISO) {
+      const info = await fetchLiturgicalCelebration(dateISO);
+      state.liturgicalInfo = info;
+
+      const titleElem = document.getElementById('liturgicalTitle');
+      if (info && info.name) {
+        if (titleElem) {
+          titleElem.textContent = info.name;
+          titleElem.style.display = 'block';
+        }
+      } else {
+        if (titleElem) titleElem.style.display = 'none';
+      }
+
+      state.suggestedHymns = {
+        entrance: getSuggestedHymns('entrance', info, dateISO),
+        offertory: getSuggestedHymns('offertory', info, dateISO),
+        communion: getSuggestedHymns('communion', info, dateISO),
+        recessional: getSuggestedHymns('recessional', info, dateISO)
+      };
+    }
 
     // DOM Elements
     const massDateInput = document.getElementById('massDate');
@@ -1016,6 +1221,14 @@
         }
       } catch (e) {
         console.warn('Could not load hymns.json directly, using fallback', e);
+      }
+      if (state.liturgicalInfo && massDateInput.value) {
+        state.suggestedHymns = {
+          entrance: getSuggestedHymns('entrance', state.liturgicalInfo, massDateInput.value),
+          offertory: getSuggestedHymns('offertory', state.liturgicalInfo, massDateInput.value),
+          communion: getSuggestedHymns('communion', state.liturgicalInfo, massDateInput.value),
+          recessional: getSuggestedHymns('recessional', state.liturgicalInfo, massDateInput.value)
+        };
       }
       renderAll();
     }
@@ -1042,9 +1255,13 @@
       massDateInput.value = formatDateISO(nextSun);
       dateHuman.textContent = formatHumanDate(nextSun);
 
+      // Check online suggestions for default date
+      updateLiturgicalSuggestions(massDateInput.value);
+
       massDateInput.addEventListener('change', () => {
         const d = new Date(massDateInput.value + 'T12:00:00');
         dateHuman.textContent = formatHumanDate(d);
+        updateLiturgicalSuggestions(massDateInput.value);
         updatePreview();
       });
     }
@@ -1078,66 +1295,100 @@
       const dropdown = document.createElement('div');
       dropdown.className = 'dropdown';
 
+      const sectionType = fieldId.split('_')[0]; // 'entrance', 'offertory', 'communion', 'recessional'
+
+      function createDropdownItem(h, isSuggested) {
+        const item = document.createElement('div');
+        item.className = 'dropdown-item' + (isSuggested ? ' is-suggested' : '');
+        item.innerHTML = `
+          <div class="item-title">
+            ${isSuggested ? '<span class="suggested-star" title="Suggested for this Mass">⭐</span> ' : ''}${escapeHtml(h.title)}
+          </div>
+          <div class="item-meta">
+            <span>${escapeHtml(h.category || 'Hymn')} ${h.author ? '• ' + escapeHtml(h.author) : ''}</span>
+            ${isSuggested 
+              ? '<span class="suggested-tag">Suggested</span>' 
+              : `<span style="font-family: monospace; font-size: 0.7rem; color: var(--text-muted);">${h.id}</span>`
+            }
+          </div>
+        `;
+        item.addEventListener('click', () => {
+          input.value = h.title;
+          input.classList.remove('is-custom');
+          clearBtn.style.display = 'flex';
+          dropdown.style.display = 'none';
+          onSelect(h.id, false);
+        });
+        return item;
+      }
+
       function showResults(query) {
         dropdown.innerHTML = '';
         const q = (query || '').toLowerCase().trim();
-        
-        let matches = [];
+        const suggested = (state.suggestedHymns && state.suggestedHymns[sectionType]) || [];
+
         if (!q) {
-          matches = HYMN_CATALOG.slice(0, 15);
+          // If we have suggested hymns, show them first
+          if (suggested.length > 0) {
+            const header = document.createElement('div');
+            header.className = 'dropdown-section-header';
+            header.innerHTML = `⭐ Suggested for this Sunday`;
+            dropdown.appendChild(header);
+
+            suggested.forEach(h => {
+              dropdown.appendChild(createDropdownItem(h, true));
+            });
+
+            const divider = document.createElement('div');
+            divider.className = 'dropdown-section-divider';
+            divider.innerHTML = `All Hymns (A–Z)`;
+            dropdown.appendChild(divider);
+          }
+
+          // Then render alphabetical catalog
+          const alphabetList = HYMN_CATALOG.filter(h => !suggested.some(s => s.id === h.id)).slice(0, 30);
+          alphabetList.forEach(h => {
+            dropdown.appendChild(createDropdownItem(h, false));
+          });
         } else {
-          matches = HYMN_CATALOG.filter(h => 
+          // Searching
+          const matches = HYMN_CATALOG.filter(h => 
             h.title.toLowerCase().includes(q) || 
             (h.first_line && h.first_line.toLowerCase().includes(q)) ||
             h.id.toLowerCase().includes(q)
-          ).slice(0, 20);
-        }
+          ).slice(0, 25);
 
-        // Custom option if user typed something not matching exactly
-        if (q && !matches.some(m => m.title.toLowerCase() === q)) {
-          const customItem = document.createElement('div');
-          customItem.className = 'dropdown-item add-custom-item';
-          customItem.innerHTML = `
-            <div>
-              <div>✨ Use as new: "<strong>${escapeHtml(query)}</strong>"</div>
-              <div style="font-size: 0.72rem; opacity: 0.85;">Will be added as a custom hymn</div>
-            </div>
-          `;
-          customItem.addEventListener('click', () => {
-            const slug = slugify(query);
-            input.value = query;
-            input.classList.add('is-custom');
-            clearBtn.style.display = 'flex';
+          // Custom option if user typed something not matching exactly
+          if (!matches.some(m => m.title.toLowerCase() === q)) {
+            const customItem = document.createElement('div');
+            customItem.className = 'dropdown-item add-custom-item';
+            customItem.innerHTML = `
+              <div>
+                <div>✨ Use as new: "<strong>${escapeHtml(query)}</strong>"</div>
+                <div style="font-size: 0.72rem; opacity: 0.85;">Will be added as a custom hymn</div>
+              </div>
+            `;
+            customItem.addEventListener('click', () => {
+              const slug = slugify(query);
+              input.value = query;
+              input.classList.add('is-custom');
+              clearBtn.style.display = 'flex';
+              dropdown.style.display = 'none';
+              onSelect(slug, true);
+            });
+            dropdown.appendChild(customItem);
+          }
+
+          if (matches.length === 0 && !query) {
             dropdown.style.display = 'none';
-            onSelect(slug, true);
-          });
-          dropdown.appendChild(customItem);
-        }
+            return;
+          }
 
-        if (matches.length === 0 && !q) {
-          dropdown.style.display = 'none';
-          return;
-        }
-
-        matches.forEach(h => {
-          const item = document.createElement('div');
-          item.className = 'dropdown-item';
-          item.innerHTML = `
-            <div class="item-title">${escapeHtml(h.title)}</div>
-            <div class="item-meta">
-              <span>${escapeHtml(h.category || 'Hymn')} ${h.author ? '• ' + escapeHtml(h.author) : ''}</span>
-              <span style="font-family: monospace; font-size: 0.7rem; color: #94a3b8;">${h.id}</span>
-            </div>
-          `;
-          item.addEventListener('click', () => {
-            input.value = h.title;
-            input.classList.remove('is-custom');
-            clearBtn.style.display = 'flex';
-            dropdown.style.display = 'none';
-            onSelect(h.id, false);
+          matches.forEach(h => {
+            const isSug = suggested.some(s => s.id === h.id);
+            dropdown.appendChild(createDropdownItem(h, isSug));
           });
-          dropdown.appendChild(item);
-        });
+        }
 
         dropdown.style.display = 'block';
       }
