@@ -596,30 +596,30 @@ def update_divider_background(prs, image_path):
     print(f"[Success] Updated divider background using {image_path} (1024x768 4:3)")
 
 
-def shorten_celebration_title(title):
-    """Shortens 'Sunday' to 'Sun' and 'Ordinary' to 'Ord' for neat layout wrapping."""
+def expand_celebration_title(title):
+    """Expands abbreviated 'Sun' to 'Sunday' and 'Ord' to 'Ordinary' for presentation display."""
     if not title:
         return title
-    title = re.sub(r'\bSunday\b', 'Sun', title, flags=re.IGNORECASE)
-    title = re.sub(r'\bOrdinary\b', 'Ord', title, flags=re.IGNORECASE)
+    title = re.sub(r'\bSun\b', 'Sunday', title, flags=re.IGNORECASE)
+    title = re.sub(r'\bOrd\b', 'Ordinary', title, flags=re.IGNORECASE)
     return title
 
 
 def update_title_slide(prs, title_text):
-    """Updates Slide 1 with Catholic Church week title (e.g. '27th Sun in Ord Time')."""
+    """Updates Slide 1 with Catholic Church week title (e.g. '28th Sunday in Ordinary Time')."""
     slide1 = prs.slides[0]
     # Shape 0 is GROUP containing banner picture and text box
     grp = slide1.shapes[0]
     txt_box = grp.shapes[1]
     tf = txt_box.text_frame
-    shortened_title = shorten_celebration_title(title_text)
-    tf.text = shortened_title
+    expanded_title = expand_celebration_title(title_text)
+    tf.text = expanded_title
     for p in tf.paragraphs:
         p.font.name = 'Calibri'
         p.font.size = Pt(32)
         p.font.bold = True
         p.alignment = PP_ALIGN.CENTER
-    print(f"[Success] Title slide updated: '{shortened_title}'")
+    print(f"[Success] Title slide updated: '{expanded_title}'")
 
 
 def enforce_center_alignment(prs):
@@ -846,7 +846,7 @@ def generate_presentation(csv_path, template_path, output_path, title_text=None,
         response_text = hymn_setup['response']
         print(f"Overriding Psalm Response Refrain from CSV: {response_text}")
     if hymn_setup.get('celebration_title'):
-        title_text = hymn_setup['celebration_title']
+        title_text = expand_celebration_title(hymn_setup['celebration_title'])
         print(f"Overriding Liturgical Title from CSV: {title_text}")
 
     raw_mass = hymn_setup.get('mass_setting', 'Mass of Renew')
