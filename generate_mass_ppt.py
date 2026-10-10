@@ -414,10 +414,22 @@ def parse_hymn_markdown(filepath):
         # Remove markdown image links
         s = re.sub(r'!\[.*?\]\(.*?\)', '', s)
 
-        # Split into non-empty lines, ignoring markdown titles/headings
-        lines = [line.strip() for line in s.splitlines() if line.strip() and not line.strip().startswith('#')]
-        if lines:
-            sections.append(lines)
+        # Strip leading/trailing spaces on each line, ignoring markdown titles/headings starting with '#'
+        raw_lines = []
+        for line in s.splitlines():
+            cleaned = line.strip()
+            if cleaned.startswith('#'):
+                continue
+            raw_lines.append(cleaned)
+
+        # Trim leading and trailing empty lines from the section
+        while raw_lines and not raw_lines[0]:
+            raw_lines.pop(0)
+        while raw_lines and not raw_lines[-1]:
+            raw_lines.pop()
+
+        if raw_lines:
+            sections.append(raw_lines)
 
     return sections, author
 
