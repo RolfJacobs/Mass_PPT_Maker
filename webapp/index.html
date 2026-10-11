@@ -693,6 +693,296 @@
       color: var(--btn-cancel-text);
     }
 
+    /* Previous Masses Block */
+    .history-block {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      padding: 12px 16px;
+      border: 1px solid var(--border);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .history-block-content {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .history-block-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      background: rgba(37, 99, 235, 0.08);
+      color: #2563eb;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    [data-theme="dark"] .history-block-icon {
+      background: rgba(147, 197, 253, 0.12);
+      color: var(--primary);
+    }
+
+    .history-block-text {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+
+    .history-block-title {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--card-title);
+      line-height: 1.25;
+    }
+
+    .history-block-sub {
+      font-size: 0.74rem;
+      color: var(--text-muted);
+      line-height: 1.25;
+      margin-top: 2px;
+    }
+
+    .history-block-btn {
+      background: var(--btn-secondary-bg);
+      color: var(--btn-secondary-text);
+      border: 1px solid var(--btn-secondary-border);
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+      flex-shrink: 0;
+      transition: all 0.15s ease;
+    }
+
+    .history-block-btn:hover {
+      background: var(--dropdown-hover);
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    /* In-Dropdown Recent Sung Badge */
+    .recent-hymn-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      font-size: 0.68rem;
+      font-weight: 700;
+      padding: 1.5px 6px;
+      border-radius: 4px;
+      background: rgba(234, 88, 12, 0.12);
+      color: #c2410c;
+      margin-left: 6px;
+      vertical-align: middle;
+      letter-spacing: 0.2px;
+    }
+    [data-theme="dark"] .recent-hymn-badge {
+      background: rgba(251, 146, 60, 0.18);
+      color: #fb923c;
+    }
+
+    /* History Modal */
+    .history-modal-card {
+      max-width: 540px;
+      max-height: 85vh;
+      display: flex;
+      flex-direction: column;
+      padding: 20px;
+    }
+
+    .history-modal-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .history-modal-header-text {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .history-modal-close {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      line-height: 1;
+      color: var(--text-muted);
+      cursor: pointer;
+      padding: 2px 6px;
+      border-radius: 6px;
+      transition: background 0.15s, color 0.15s;
+    }
+
+    .history-modal-close:hover {
+      background: var(--dropdown-hover);
+      color: var(--text);
+    }
+
+    .history-list {
+      overflow-y: auto;
+      flex: 1;
+      padding: 12px 2px 12px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin: 4px 0 8px 0;
+    }
+
+    .history-mass-item {
+      background: var(--input-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      transition: border-color 0.15s;
+    }
+
+    .history-mass-item:hover {
+      border-color: var(--primary);
+    }
+
+    .history-mass-item-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .history-mass-title-group {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .history-mass-date {
+      font-weight: 700;
+      font-size: 0.92rem;
+      color: var(--card-title);
+    }
+
+    .history-mass-sunday {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--accent);
+    }
+
+    .history-mass-badge {
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 999px;
+      background: rgba(37, 99, 235, 0.1);
+      color: #2563eb;
+    }
+    [data-theme="dark"] .history-mass-badge {
+      background: rgba(147, 197, 253, 0.15);
+      color: var(--primary);
+    }
+
+    .history-hymn-rows {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      font-size: 0.8rem;
+      color: var(--text);
+      background: var(--card-bg);
+      border-radius: 8px;
+      padding: 8px 10px;
+      border: 1px solid var(--border-light);
+    }
+
+    .history-hymn-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 6px;
+      line-height: 1.35;
+    }
+
+    .history-hymn-row-label {
+      font-weight: 700;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      width: 24px;
+      flex-shrink: 0;
+      text-transform: uppercase;
+      padding-top: 1px;
+    }
+
+    .history-hymn-row-content {
+      flex: 1;
+      word-break: break-word;
+      color: var(--card-title);
+    }
+
+    .history-mass-actions {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 8px;
+      margin-top: 2px;
+    }
+
+    .history-load-btn {
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      padding: 3px 8px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.15s;
+    }
+
+    .history-load-btn:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+      background: var(--dropdown-hover);
+    }
+
+    .history-modal-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 10px;
+      border-top: 1px solid var(--border);
+      gap: 8px;
+    }
+
+    .history-save-current-link {
+      font-size: 0.76rem;
+      color: var(--accent);
+      background: none;
+      border: none;
+      cursor: pointer;
+      text-decoration: underline;
+      padding: 0;
+    }
+    .history-save-current-link:hover {
+      color: var(--accent-hover);
+    }
+
     /* Toast */
     .toast {
       position: fixed;
@@ -817,6 +1107,23 @@
         <div id="liturgicalPsalm" style="font-size: 0.8rem; color: var(--accent); font-weight: 600; font-style: italic; margin-top: 2px; line-height: 1.35; display: none;"></div>
       </div>
       <input type="date" id="massDate" class="date-input">
+    </div>
+
+    <!-- Previous Masses Block -->
+    <div class="history-block">
+      <div class="history-block-content">
+        <div class="history-block-icon" aria-hidden="true">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </div>
+        <div class="history-block-text">
+          <span class="history-block-title">Hymn History</span>
+          <span class="history-block-sub">Check previously sung hymns to avoid repetition</span>
+        </div>
+      </div>
+      <button type="button" class="history-block-btn" id="openHistoryBtn" aria-haspopup="dialog" aria-controls="historyModal">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M1 4v6h6"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+        Previous Masses
+      </button>
     </div>
 
     <!-- Entrance Hymn -->
@@ -995,6 +1302,28 @@
       </div>
       <p id="qrUrlText" style="font-size: 0.75rem; color: var(--text-muted); word-break: break-all; margin-bottom: 16px;"></p>
       <button class="btn btn-primary" id="closeQrBtn" style="width: 100%;">Close</button>
+    </div>
+  </div>
+
+  <!-- Previous Masses Modal -->
+  <div class="modal-overlay" id="historyModal" role="dialog" aria-modal="true" aria-labelledby="historyModalTitle">
+    <div class="modal-card history-modal-card">
+      <div class="history-modal-header">
+        <div class="history-modal-header-text">
+          <div class="modal-title" id="historyModalTitle">Previous Masses</div>
+          <div class="modal-desc" style="margin-bottom: 0;">Review hymns sung across recent Sunday liturgies to avoid repetition.</div>
+        </div>
+        <button type="button" class="history-modal-close" id="closeHistoryBtn" aria-label="Close modal">&times;</button>
+      </div>
+
+      <div class="history-list" id="historyListContainer">
+        <!-- Rendered by JS -->
+      </div>
+
+      <div class="history-modal-footer">
+        <button type="button" class="history-save-current-link" id="logCurrentMassBtn">📌 Log current setup to history</button>
+        <button type="button" class="btn btn-cancel" id="closeHistoryFooterBtn" style="flex: 0 0 auto; padding: 8px 16px;">Close</button>
+      </div>
     </div>
   </div>
 
@@ -1487,6 +1816,168 @@
       return id.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
     }
 
+    // History Helpers
+    function getWeeksDifference(targetDateStr, pastDateStr) {
+      try {
+        const dTarget = new Date(targetDateStr + 'T12:00:00');
+        const dPast = new Date(pastDateStr + 'T12:00:00');
+        const diffMs = dTarget.getTime() - dPast.getTime();
+        return Math.round(diffMs / (7 * 24 * 60 * 60 * 1000));
+      } catch (e) {
+        return null;
+      }
+    }
+
+    function formatShortDate(dateStr) {
+      try {
+        const d = new Date(dateStr + 'T12:00:00');
+        if (isNaN(d.getTime())) return dateStr;
+        return d.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
+      } catch (e) {
+        return dateStr;
+      }
+    }
+
+    function getDefaultMassHistory() {
+      return [
+        {
+          date: '2026-10-11',
+          sundayTitle: '28th Sun in Ord Time (Year A)',
+          massSetting: 'mass_of_renew',
+          entrance: 'the_churchs_one_foundation',
+          offertory: ['take_our_bread', 'to_be_the_body_of_the_lord_in_this_world', 'christ_be_beside_me'],
+          communion: ['as_the_deer', 'all_to_jesus_i_surrender'],
+          recessional: 'go_the_mass_is_ended'
+        },
+        {
+          date: '2026-10-04',
+          sundayTitle: '27th Sun in Ord Time (Year A)',
+          massSetting: 'mass_of_renew',
+          entrance: 'praise_to_the_lord_the_almighty',
+          offertory: ['take_our_bread', 'lord_accept_the_gifts_we_offer', 'all_that_i_am_all_that_i_do'],
+          communion: ['soul_of_my_saviour', 'sweet_sacrement_divine'],
+          recessional: 'tell_out_my_soul'
+        },
+        {
+          date: '2026-09-27',
+          sundayTitle: '26th Sun in Ord Time (Year A)',
+          massSetting: 'mass_of_renew',
+          entrance: 'all_people_that_on_earth_do_dwell',
+          offertory: ['in_bread_we_bring_you_lord', 'gifts_of_bread_and_wine'],
+          communion: ['one_bread_one_body', 'o_bread_of_heaven'],
+          recessional: 'to_god_be_the_glory'
+        },
+        {
+          date: '2026-09-20',
+          sundayTitle: '25th Sun in Ord Time (Year A)',
+          massSetting: 'mass_of_renew',
+          entrance: 'the_churchs_one_foundation',
+          offertory: ['take_our_bread', 'blessed_are_you_lord_god_of_all_creation'],
+          communion: ['as_the_deer', 'i_am_the_bread_of_life_toolan'],
+          recessional: 'shine_jesus_shine'
+        },
+        {
+          date: '2026-09-13',
+          sundayTitle: '24th Sun in Ord Time (Year A)',
+          massSetting: 'mass_of_renew',
+          entrance: 'praise_my_soul_the_king_of_heaven',
+          offertory: ['lord_accept_the_gifts_we_offer', 'what_can_we_offer_you_lord_our_god'],
+          communion: ['soul_of_my_saviour', 'sweet_sacrement_divine'],
+          recessional: 'now_thank_we_all_our_god'
+        }
+      ];
+    }
+
+    function getMassHistory() {
+      try {
+        const raw = localStorage.getItem('mass_history');
+        if (raw) {
+          let parsed = JSON.parse(raw);
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            // Ensure 2026-10-11 from mass_setup.csv is included if older cache exists
+            if (!parsed.some(m => m.date === '2026-10-11')) {
+              const defaultList = getDefaultMassHistory();
+              parsed.unshift(defaultList[0]);
+              parsed = parsed.slice(0, 5);
+              localStorage.setItem('mass_history', JSON.stringify(parsed));
+            }
+            return parsed;
+          }
+        }
+      } catch (e) {
+        console.warn('Failed to parse mass_history from localStorage', e);
+      }
+      return getDefaultMassHistory();
+    }
+
+    function getRecentHymnInfo(hymnId) {
+      if (!hymnId) return null;
+      const history = getMassHistory();
+      const currentMassDate = massDateInput ? massDateInput.value : formatDateISO(new Date());
+
+      // Compare against the last 5 recorded masses (excluding current date)
+      const relevant = history.filter(m => m.date !== currentMassDate).slice(0, 5);
+
+      for (let i = 0; i < relevant.length; i++) {
+        const m = relevant[i];
+        const hymns = [
+          m.entrance,
+          ...(m.offertory || []),
+          ...(m.communion || []),
+          m.recessional
+        ].filter(Boolean);
+
+        if (hymns.includes(hymnId)) {
+          const diff = getWeeksDifference(currentMassDate, m.date);
+          let relativeText = '';
+          if (diff === 1) {
+            relativeText = '1 wk ago';
+          } else if (diff && diff > 1) {
+            relativeText = `${diff} wks ago`;
+          } else {
+            const d = new Date(m.date + 'T12:00:00');
+            relativeText = !isNaN(d.getTime()) ? d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }) : 'Recent';
+          }
+
+          return {
+            mass: m,
+            relativeText: relativeText,
+            fullTitle: m.sundayTitle || m.date
+          };
+        }
+      }
+      return null;
+    }
+
+    function saveCurrentMassToHistory() {
+      const dateVal = massDateInput ? massDateInput.value : '';
+      if (!dateVal) return;
+
+      const titleElem = document.getElementById('liturgicalTitle');
+      const sundayTitle = (titleElem && titleElem.textContent && titleElem.style.display !== 'none')
+        ? titleElem.textContent
+        : formatHumanDate(new Date(dateVal + 'T12:00:00'));
+
+      const entry = {
+        date: dateVal,
+        sundayTitle: sundayTitle,
+        massSetting: state.massSetting,
+        entrance: state.entrance || '',
+        offertory: state.offertory.filter(Boolean),
+        communion: state.communion.filter(Boolean),
+        recessional: state.recessional || '',
+        savedAt: new Date().toISOString()
+      };
+
+      let history = getMassHistory();
+      // Remove any existing entry for the same date to avoid duplicates
+      history = history.filter(m => m.date !== dateVal);
+      history.unshift(entry);
+      if (history.length > 15) history = history.slice(0, 15);
+
+      localStorage.setItem('mass_history', JSON.stringify(history));
+    }
+
     // Create Autocomplete Component
     function createAutocomplete(fieldId, value, onSelect) {
       const wrapper = document.createElement('div');
@@ -1512,9 +2003,14 @@
       function createDropdownItem(h, isSuggested) {
         const item = document.createElement('div');
         item.className = 'dropdown-item' + (isSuggested ? ' is-suggested' : '');
+        const recentInfo = getRecentHymnInfo(h.id);
+        const recentBadge = recentInfo 
+          ? `<span class="recent-hymn-badge" title="Sung ${escapeHtml(recentInfo.relativeText)} (${escapeHtml(recentInfo.fullTitle)})">🕒 ${escapeHtml(recentInfo.relativeText)}</span>` 
+          : '';
+
         item.innerHTML = `
           <div class="item-title">
-            ${isSuggested ? '<span class="suggested-star" title="Suggested for this Mass">⭐</span> ' : ''}${escapeHtml(h.title)}
+            ${isSuggested ? '<span class="suggested-star" title="Suggested for this Mass">⭐</span> ' : ''}${escapeHtml(h.title)}${recentBadge}
           </div>
           <div class="item-meta">
             <span>${escapeHtml(h.category || 'Hymn')} ${h.author ? '• ' + escapeHtml(h.author) : ''}</span>
@@ -1938,6 +2434,7 @@
 
     // WhatsApp Action: Direct WhatsApp message with human-readable titles and CSV setup data
     document.getElementById('sendWhatsAppBtn').addEventListener('click', () => {
+      saveCurrentMassToHistory();
       let phone = state.phone || DEFAULT_PHONE;
       let cleanPhone = phone.replace(/[^0-9]/g, '');
       if (cleanPhone.startsWith('0') && cleanPhone.length === 10) {
@@ -1956,12 +2453,14 @@
 
     // Download Action
     document.getElementById('downloadBtn').addEventListener('click', () => {
+      saveCurrentMassToHistory();
       triggerCsvDownload();
       showToast('mass_setup.csv downloaded');
     });
 
     // Copy Action: Copies formatted human readable message + CSV block
     document.getElementById('copyBtn').addEventListener('click', async () => {
+      saveCurrentMassToHistory();
       try {
         await navigator.clipboard.writeText(buildWhatsAppTextMessage());
         showToast('Message & CSV copied to clipboard');
@@ -2091,11 +2590,150 @@
       qrModal.style.display = 'none';
     });
 
-    // Close modals on overlay click
-    [settingsModal, qrModal].forEach(m => {
-      m.addEventListener('click', (e) => {
-        if (e.target === m) m.style.display = 'none';
+    // Previous Masses Modal
+    const historyModal = document.getElementById('historyModal');
+    const openHistoryBtn = document.getElementById('openHistoryBtn');
+    const closeHistoryBtn = document.getElementById('closeHistoryBtn');
+    const closeHistoryFooterBtn = document.getElementById('closeHistoryFooterBtn');
+    const historyListContainer = document.getElementById('historyListContainer');
+    const logCurrentMassBtn = document.getElementById('logCurrentMassBtn');
+
+    function renderHistoryModal() {
+      if (!historyListContainer) return;
+      const history = getMassHistory();
+      const currentMassDate = massDateInput ? massDateInput.value : formatDateISO(new Date());
+      const displayList = history.slice(0, 5);
+
+      if (displayList.length === 0) {
+        historyListContainer.innerHTML = `<div class="empty-hymn-state">No previous masses recorded yet.</div>`;
+        return;
+      }
+
+      historyListContainer.innerHTML = '';
+      displayList.forEach((m, idx) => {
+        const diffWeeks = getWeeksDifference(currentMassDate, m.date);
+        let relBadgeText = '';
+        if (diffWeeks === 1) {
+          relBadgeText = '1 wk ago';
+        } else if (diffWeeks && diffWeeks > 1) {
+          relBadgeText = `${diffWeeks} wks ago`;
+        } else if (diffWeeks === 0) {
+          relBadgeText = 'This mass';
+        } else {
+          const d = new Date(m.date + 'T12:00:00');
+          relBadgeText = !isNaN(d.getTime()) ? d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }) : 'Past';
+        }
+
+        const entranceText = m.entrance ? getHymnDisplay(m.entrance) : '—';
+        const offText = (m.offertory && m.offertory.length)
+          ? m.offertory.map(getHymnDisplay).join(' • ')
+          : '—';
+        const comText = (m.communion && m.communion.length)
+          ? m.communion.map(getHymnDisplay).join(' • ')
+          : '—';
+        const recText = m.recessional ? getHymnDisplay(m.recessional) : '—';
+
+        const item = document.createElement('div');
+        item.className = 'history-mass-item';
+        item.innerHTML = `
+          <div class="history-mass-item-top">
+            <div class="history-mass-title-group">
+              <span class="history-mass-date">${escapeHtml(formatShortDate(m.date))}</span>
+              ${m.sundayTitle ? `<span class="history-mass-sunday">${escapeHtml(m.sundayTitle)}</span>` : ''}
+            </div>
+            <span class="history-mass-badge">${escapeHtml(relBadgeText)}</span>
+          </div>
+          <div class="history-hymn-rows">
+            <div class="history-hymn-row">
+              <span class="history-hymn-row-label">Ent</span>
+              <span class="history-hymn-row-content">${escapeHtml(entranceText)}</span>
+            </div>
+            <div class="history-hymn-row">
+              <span class="history-hymn-row-label">Off</span>
+              <span class="history-hymn-row-content">${escapeHtml(offText)}</span>
+            </div>
+            <div class="history-hymn-row">
+              <span class="history-hymn-row-label">Com</span>
+              <span class="history-hymn-row-content">${escapeHtml(comText)}</span>
+            </div>
+            <div class="history-hymn-row">
+              <span class="history-hymn-row-label">Rec</span>
+              <span class="history-hymn-row-content">${escapeHtml(recText)}</span>
+            </div>
+          </div>
+          <div class="history-mass-actions">
+            <button type="button" class="history-load-btn" data-history-idx="${idx}" title="Load this past hymn setup into current planner">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+              Load into planner
+            </button>
+          </div>
+        `;
+        historyListContainer.appendChild(item);
       });
+    }
+
+    function openHistoryModal() {
+      renderHistoryModal();
+      historyModal.style.display = 'flex';
+    }
+
+    function closeHistoryModal() {
+      historyModal.style.display = 'none';
+    }
+
+    function loadMassIntoPlanner(entry) {
+      if (!entry) return;
+      state.entrance = entry.entrance || '';
+      state.offertory = (entry.offertory && entry.offertory.length) ? [...entry.offertory] : [''];
+      state.communion = (entry.communion && entry.communion.length) ? [...entry.communion] : [''];
+      state.recessional = entry.recessional || '';
+      if (entry.massSetting) {
+        state.massSetting = entry.massSetting;
+      }
+      renderAll();
+      closeHistoryModal();
+      showToast(`Loaded hymns from ${formatShortDate(entry.date)}`);
+    }
+
+    if (openHistoryBtn) openHistoryBtn.addEventListener('click', openHistoryModal);
+    if (closeHistoryBtn) closeHistoryBtn.addEventListener('click', closeHistoryModal);
+    if (closeHistoryFooterBtn) closeHistoryFooterBtn.addEventListener('click', closeHistoryModal);
+
+    if (logCurrentMassBtn) {
+      logCurrentMassBtn.addEventListener('click', () => {
+        saveCurrentMassToHistory();
+        renderHistoryModal();
+        showToast('Current mass saved to history');
+      });
+    }
+
+    if (historyListContainer) {
+      historyListContainer.addEventListener('click', (e) => {
+        const btn = e.target.closest('.history-load-btn');
+        if (!btn) return;
+        const idx = parseInt(btn.dataset.historyIdx, 10);
+        const history = getMassHistory().slice(0, 5);
+        if (history[idx]) {
+          loadMassIntoPlanner(history[idx]);
+        }
+      });
+    }
+
+    // Close modals on overlay click or Escape key
+    [settingsModal, qrModal, historyModal].forEach(m => {
+      if (m) {
+        m.addEventListener('click', (e) => {
+          if (e.target === m) m.style.display = 'none';
+        });
+      }
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        if (historyModal && historyModal.style.display === 'flex') historyModal.style.display = 'none';
+        if (settingsModal && settingsModal.style.display === 'flex') settingsModal.style.display = 'none';
+        if (qrModal && qrModal.style.display === 'flex') qrModal.style.display = 'none';
+      }
     });
 
     // Init

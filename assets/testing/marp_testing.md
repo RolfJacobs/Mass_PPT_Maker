@@ -3,21 +3,21 @@ marp: true
 size: 4:3
 theme: gaia
 class:
-  - lead
-  - invert
+- lead
+- invert
 ---
 
 
 <style>
-  :root {
-    --color-background: #000;  
-    --color-foreground: #fff;
-    --color-highlight: #f96;
-    --color-dimmed: #888;
-  }
-  section {
-    justify-content: start;    
-  }
+:root {
+--color-background: #000;
+--color-foreground: #fff;
+--color-highlight: #f96;
+--color-dimmed: #888;
+}
+section {
+justify-content: start;
+}
 </style>
 
 

@@ -1,0 +1,10 @@
+agy —dangerously-skip-permissions 
+generate presentation :: python3 generate_mass_ppt.py
+run local server :: python3 -m http.server 8000
+
+# Specify custom CSV or output file
+    python3 generate_mass_ppt.py --csv my_setup.csv --output sunday_mass.pptx
+# Target a specific Sunday date (format: YYYY-MM-DD)
+    python3 generate_mass_ppt.py --date 2026-10-11
+# Use a specific divider background image
+    python3 generate_mass_ppt.py --image assets/divider_theme.png

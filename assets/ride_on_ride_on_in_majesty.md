@@ -29,7 +29,7 @@ EXPECTS HIS OWN ANOINTED SON
 RIDE ON, RIDE ON IN MAJESTY
 IN LOWLY POMP RIDE ON TO DIE
 BOW THY MEEK HEAD TO MORTAL PAIN
-THEN TAKE, OH GOD, 
+THEN TAKE, OH GOD,
 THY POWER AND REIGN
 <span style="color:Gold; font-size:20px">-Anonymous</span>
 ![](_assets/_hymn_end.jpg)

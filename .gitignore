@@ -11,6 +11,8 @@ ENV/
 
 # Generated PPT outputs (mass_template.pptx is the master template)
 mass_presentation.pptx
+* y[ABC] *.pptx
+* y[abc] *.pptx
 test_*.pptx
 *_output.pptx
 output/

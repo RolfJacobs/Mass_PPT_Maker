@@ -402,22 +402,27 @@ def parse_hymn_markdown(filepath):
         if not s:
             continue
 
-        # Extract author from <span ...>-Author</span>
-        span_match = re.search(r'<span[^>]*>(.*?)</span>', s, re.IGNORECASE | re.DOTALL)
-        if span_match:
-            auth_raw = span_match.group(1).strip()
-            if auth_raw.startswith('-'):
-                auth_raw = auth_raw[1:].strip()
-            author = auth_raw
+        # Extract author from <span ...>-Author</span> (supports multiple spans)
+        spans = re.findall(r'<span[^>]*>(.*?)</span>', s, flags=re.IGNORECASE | re.DOTALL)
+        if spans:
+            author_lines = []
+            for sp in spans:
+                auth_raw = sp.strip()
+                if auth_raw.startswith('-'):
+                    auth_raw = auth_raw[1:].strip()
+                if auth_raw:
+                    author_lines.append(auth_raw)
+            if author_lines:
+                author = author_lines
             s = re.sub(r'<span[^>]*>.*?</span>', '', s, flags=re.IGNORECASE | re.DOTALL)
 
         # Remove markdown image links
         s = re.sub(r'!\[.*?\]\(.*?\)', '', s)
 
-        # Strip leading/trailing spaces on each line, ignoring markdown titles/headings starting with '#'
+        # Strip leading/trailing spaces and tabs on each line, ignoring markdown titles/headings starting with '#'
         raw_lines = []
         for line in s.splitlines():
-            cleaned = line.strip()
+            cleaned = line.replace('\t', '').strip(' \t\r\n\xa0')
             if cleaned.startswith('#'):
                 continue
             raw_lines.append(cleaned)
@@ -432,6 +437,32 @@ def parse_hymn_markdown(filepath):
             sections.append(raw_lines)
 
     return sections, author
+
+
+def get_template_font_size(shape, default_pt=28):
+    """Inspects shape for template font size (e.g. 28pt), falling back to default_pt."""
+    if not shape or not shape.has_text_frame:
+        return Pt(default_pt)
+    for p in shape.text_frame.paragraphs:
+        if p.font and p.font.size and p.font.size.pt >= 20:
+            return p.font.size
+        for r in p.runs:
+            if r.font and r.font.size and r.font.size.pt >= 20:
+                return r.font.size
+    try:
+        import xml.etree.ElementTree as ET
+        root = ET.fromstring(shape._element.txBody.xml)
+        for elem in root.findall('.//{http://schemas.openxmlformats.org/drawingml/2006/main}rPr'):
+            sz = elem.attrib.get('sz')
+            if sz and int(sz) >= 2000:
+                return Pt(int(sz) / 100)
+        for elem in root.findall('.//{http://schemas.openxmlformats.org/drawingml/2006/main}defRPr'):
+            sz = elem.attrib.get('sz')
+            if sz and int(sz) >= 2000:
+                return Pt(int(sz) / 100)
+    except Exception:
+        pass
+    return Pt(default_pt)
 
 
 def get_hymn_shapes(slide):
@@ -458,44 +489,78 @@ def get_hymn_shapes(slide):
     return header_shape, lyrics_shape, pic_shape
 
 
-def populate_lyrics(lyrics_shape, lines, author=None):
+def populate_lyrics(lyrics_shape, lines, author=None, font_size=None):
     """Populates lines of lyrics and optional author into a text frame with clean styling."""
     tf = lyrics_shape.text_frame
+
+    # Preserve template vertical alignment (leading empty paragraph)
+    had_leading_blank = len(tf.paragraphs) > 0 and tf.paragraphs[0].text.strip() == ''
+    template_line_spacing = tf.paragraphs[0].line_spacing if tf.paragraphs else None
+    template_space_before = tf.paragraphs[0].space_before if tf.paragraphs else None
+
+    # Maintain template font size (default 28pt) instead of downscaling
+    if font_size is None:
+        font_sz = get_template_font_size(lyrics_shape, default_pt=28)
+    else:
+        font_sz = font_size
+
     tf.clear()
 
-    # Determine optimal font size based on text density
-    num_lines = len(lines)
-    max_len = max(len(l) for l in lines) if lines else 0
+    final_lines = list(lines)
+    if had_leading_blank and final_lines and final_lines[0] != '':
+        final_lines.insert(0, '')
 
-    if num_lines >= 8 or max_len > 38:
-        font_sz = Pt(22)
-    elif num_lines >= 6 or max_len > 32:
-        font_sz = Pt(25)
-    else:
-        font_sz = Pt(28)
-
-    for i, line in enumerate(lines):
+    for i, line in enumerate(final_lines):
+        clean_line = line.replace('\t', '').strip(' \t\r\n\xa0') if line != '' else ''
         p = tf.paragraphs[0] if i == 0 else tf.add_paragraph()
-        p.text = line
+        p.text = clean_line
         p.alignment = PP_ALIGN.CENTER
         p.font.name = 'Arial'
         p.font.size = font_sz
         p.font.bold = True
         p.font.color.rgb = RGBColor(255, 255, 255)
+        pPr = p._p.get_or_add_pPr()
+        pPr.set('marL', '0')
+        pPr.set('indent', '0')
+        if template_line_spacing is not None:
+            p.line_spacing = template_line_spacing
+        if template_space_before is not None:
+            p.space_before = template_space_before
+        for r in p.runs:
+            r.font.name = 'Arial'
 
     if author:
         # Blank line
         p_blank = tf.add_paragraph()
         p_blank.text = ""
         p_blank.font.size = Pt(10)
+        p_blank.font.name = 'Arial'
+        pPr_blank = p_blank._p.get_or_add_pPr()
+        pPr_blank.set('marL', '0')
+        pPr_blank.set('indent', '0')
 
-        p_auth = tf.add_paragraph()
-        p_auth.text = author if author.startswith('-') else f"-{author}"
-        p_auth.alignment = PP_ALIGN.CENTER
-        p_auth.font.name = 'Arial'
-        p_auth.font.size = Pt(18)
-        p_auth.font.bold = False
-        p_auth.font.color.rgb = RGBColor(255, 242, 204) # Gold/cream
+        author_list = author if isinstance(author, list) else [author]
+        for auth_item in author_list:
+            for auth_line in str(auth_item).splitlines():
+                auth_line = auth_line.replace('\t', '').strip(' \t\r\n\xa0')
+                if not auth_line:
+                    continue
+                if auth_line.startswith('-'):
+                    auth_line = auth_line[1:].strip(' \t\r\n\xa0')
+                p_auth = tf.add_paragraph()
+                p_auth.text = auth_line
+                p_auth.alignment = PP_ALIGN.CENTER
+                p_auth.font.name = 'Arial'
+                p_auth.font.size = Pt(18)
+                p_auth.font.bold = True
+                p_auth.font.color.rgb = RGBColor(255, 242, 204) # Gold/cream
+                pPr_auth = p_auth._p.get_or_add_pPr()
+                pPr_auth.set('marL', '0')
+                pPr_auth.set('indent', '0')
+                if template_line_spacing is not None:
+                    p_auth.line_spacing = template_line_spacing
+                for r in p_auth.runs:
+                    r.font.name = 'Arial'
 
 
 def clone_slide_to_position(prs, source_slide, insert_before_idx):
@@ -624,25 +689,76 @@ def update_title_slide(prs, title_text):
     grp = slide1.shapes[0]
     txt_box = grp.shapes[1]
     tf = txt_box.text_frame
-    expanded_title = expand_celebration_title(title_text)
+    expanded_title = expand_celebration_title(title_text).replace('\t', '').strip(' \t\r\n\xa0')
     tf.text = expanded_title
     for p in tf.paragraphs:
-        p.font.name = 'Calibri'
+        p.font.name = 'Arial'
         p.font.size = Pt(32)
         p.font.bold = True
         p.alignment = PP_ALIGN.CENTER
+        pPr = p._p.get_or_add_pPr()
+        pPr.set('marL', '0')
+        pPr.set('indent', '0')
+        for r in p.runs:
+            r.font.name = 'Arial'
     print(f"[Success] Title slide updated: '{expanded_title}'")
 
 
 def enforce_center_alignment(prs):
-    """Rule to ensure all text across all shapes, groups, and slides is centre-aligned."""
+    """
+    Presentation-wide rule to ensure:
+    1. All text across all shapes, groups, and slides is centre-aligned.
+    2. All margins (marL) and first-line indents (indent) are 0 to prevent off-center lines.
+    3. All tabs are removed, and leading/trailing spaces are stripped from all lines and runs.
+    4. All fonts use Arial.
+    """
     def align_shape(shape):
         if shape.shape_type == 6:  # GROUP shape
             for subshape in shape.shapes:
                 align_shape(subshape)
         elif shape.has_text_frame:
+            # Enforce XML typeface attributes to Arial
+            for elem in shape._element.xpath('.//a:latin | .//a:cs | .//a:ea'):
+                elem.set('typeface', 'Arial')
+
+            # Zero out marL and indent in lstStyle to eliminate default hanging bullet indents
+            for elem in shape._element.xpath('.//a:lstStyle/*'):
+                elem.set('marL', '0')
+                elem.set('indent', '0')
+
             for p in shape.text_frame.paragraphs:
+                pPr = p._p.get_or_add_pPr()
+                pPr.set('marL', '0')
+                pPr.set('indent', '0')
+
+                # Remove any tab characters/elements
+                for tab in p._p.xpath('.//a:tab'):
+                    parent = tab.getparent()
+                    if parent is not None:
+                        parent.remove(tab)
+
+                # Clean leading and trailing whitespace and tabs from text and runs
+                raw_text = p.text
+                if '\t' in raw_text or raw_text.startswith(' ') or raw_text.endswith(' ') or '\xa0' in raw_text:
+                    cleaned_text = raw_text.replace('\t', '').strip(' \t\r\n\xa0')
+                    if p.runs:
+                        for r in p.runs:
+                            r.text = r.text.replace('\t', '')
+                        for r in p.runs:
+                            if r.text:
+                                r.text = r.text.lstrip(' \t\r\n\xa0')
+                                break
+                        for r in reversed(p.runs):
+                            if r.text:
+                                r.text = r.text.rstrip(' \t\r\n\xa0')
+                                break
+                    else:
+                        p.text = cleaned_text
+
                 p.alignment = PP_ALIGN.CENTER
+                p.font.name = 'Arial'
+                for r in p.runs:
+                    r.font.name = 'Arial'
 
     for slide in prs.slides:
         for shape in slide.shapes:
@@ -658,13 +774,19 @@ def update_response_slide(prs, response_lines):
     tf.clear()
 
     for i, line in enumerate(response_lines):
+        clean_line = line.replace('\t', '').strip(' \t\r\n\xa0')
         p = tf.paragraphs[0] if i == 0 else tf.add_paragraph()
-        p.text = line
+        p.text = clean_line
         p.alignment = PP_ALIGN.CENTER
         p.font.name = 'Arial'
-        p.font.size = Pt(38) if len(line) <= 24 else Pt(32)
+        p.font.size = Pt(38) if len(clean_line) <= 24 else Pt(32)
         p.font.bold = True
         p.font.color.rgb = RGBColor(255, 255, 255)
+        pPr = p._p.get_or_add_pPr()
+        pPr.set('marL', '0')
+        pPr.set('indent', '0')
+        for r in p.runs:
+            r.font.name = 'Arial'
 
     print(f"[Success] Response slide updated: {' / '.join(response_lines)}")
 
@@ -975,17 +1097,34 @@ def generate_presentation(csv_path, template_path, output_path, title_text=None,
     # 8. Enforce rule: all text across all slides is centre aligned
     enforce_center_alignment(prs)
 
-    # 9. Save Final Presentation
+    # 9. Determine Output Path and Save Final Presentation
+    if not output_path or output_path == "mass_presentation.pptx":
+        cycle_letter = get_liturgical_cycle_letter(target_date)
+        expanded_title = expand_celebration_title(title_text)
+        clean_title = re.sub(r'[\\/*?:"<>|]', '', expanded_title).strip()
+        dynamic_filename = f"{clean_title} y{cycle_letter} {target_date.year}.pptx"
+        if output_path and os.path.dirname(output_path):
+            output_path = os.path.join(os.path.dirname(output_path), dynamic_filename)
+        else:
+            output_path = dynamic_filename
+
     prs.save(output_path)
+    if os.path.abspath(output_path) != os.path.abspath("mass_presentation.pptx"):
+        try:
+            import shutil
+            shutil.copy2(output_path, "mass_presentation.pptx")
+        except Exception:
+            pass
     print(f"\n[Done] Successfully generated presentation: {output_path} (Total slides: {len(prs.slides)})")
     print("=" * 60)
+    return output_path
 
 
 def main():
     parser = argparse.ArgumentParser(description="Automate Catholic Mass PowerPoint generation.")
     parser.add_argument("--csv", default="mass_setup.csv", help="Path to input CSV setup file.")
     parser.add_argument("--template", default="mass_template.pptx", help="Path to PowerPoint template.")
-    parser.add_argument("--output", default="mass_presentation.pptx", help="Path for generated output presentation.")
+    parser.add_argument("--output", default=None, help="Path for generated output presentation (defaults to Slide 1 title + cycle + year).")
     parser.add_argument("--title", default=None, help="Override title slide text (e.g. '27th Sunday in Ordinary Time').")
     parser.add_argument("--response", default=None, help="Override responsorial psalm response text.")
     parser.add_argument("--image", default=None, help="Path to 4:3 background image for divider slides.")
