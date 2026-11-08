@@ -67,12 +67,17 @@ If hymns or assets were added or changed, also run:
 python3 sync_catalog.py
 ```
 
-### Step 4: Final Confirmation
+### Step 4: Final Confirmation & Auto-Deploy
 1. Verify `assets/divider_theme.png` exists.
 2. If `generate_mass_ppt.py` was executed, verify the generated `.pptx` presentation was created, `webapp/history.json` was updated, and `webapp/index.html` contains the embedded entry.
-3. Check `git status` to ensure `webapp/history.json` and `webapp/index.html` are tracked and ready to commit/push so GitHub Pages updates on next push.
+3. Automatically commit and push webapp updates so GitHub Pages deploys seamlessly without manual user intervention:
+```bash
+git add webapp/ assets/divider_theme.png mass_setup.csv generate_mass_ppt.py sync_catalog.py .agents/
+git commit -m "Update mass presentation, history, and theme for [Sunday Title]"
+git push origin main
+```
 4. Present a concise summary to the user:
    - Target Sunday date and liturgical title.
    - Scriptural theme depicted in the image.
    - Clickable link to the updated files: `assets/divider_theme.png` and the generated PowerPoint file (e.g. `[Title] y[Cycle] [Year].pptx`).
-   - Mention webapp mass history status and reminder to commit/push to deploy to GitHub Pages if hosted online.
+   - Confirmation that GitHub Pages has been updated and deployed.
