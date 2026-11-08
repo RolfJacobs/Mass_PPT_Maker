@@ -34,7 +34,7 @@ Use the `invoke_subagent` tool with `typeName="image-generator"`, `role="Liturgi
 2. **Subject Matter**: A serene, reverent, and artistic biblical depiction capturing the central theme of the Sunday readings (e.g., the Heavenly Banquet, the Good Shepherd, Living Water, etc.).
 3. **Lighting & Color**: Soft divine light, cinematic depth, warm golden light and liturgical colors appropriate for the season (Ordinary Time: warm greens and gold; Advent: violet/purple and soft dawn; Lent: violet and solemn desert light; Easter/Christmas: radiant white and gold).
 4. **STRICT RULE - NO TEXT**: **NO text, NO words, NO letters, NO typography, NO watermarks** anywhere on the image.
-5. **Output Destination**: Save the generated image directly to `assets/divider_theme.png`.
+5. **Output Destination**: Save the generated image to `assets/divider_theme.png`. *(Note: If the subagent saves the image in the artifact directory, copy and convert it to `assets/divider_theme.png`)*.
 
 Example subagent invocation prompt:
 ```text
@@ -60,11 +60,19 @@ Run:
 ```bash
 python3 generate_mass_ppt.py
 ```
+*(Note: `generate_mass_ppt.py` automatically updates `webapp/history.json` AND embeds `DEFAULT_MASS_HISTORY` into `webapp/index.html` so offline/local and GitHub Pages deployments both stay up to date without caching issues).*
+
+If hymns or assets were added or changed, also run:
+```bash
+python3 sync_catalog.py
+```
 
 ### Step 4: Final Confirmation
 1. Verify `assets/divider_theme.png` exists.
-2. If `generate_mass_ppt.py` was executed, verify the generated `.pptx` presentation was created.
-3. Present a concise summary to the user:
+2. If `generate_mass_ppt.py` was executed, verify the generated `.pptx` presentation was created, `webapp/history.json` was updated, and `webapp/index.html` contains the embedded entry.
+3. Check `git status` to ensure `webapp/history.json` and `webapp/index.html` are tracked and ready to commit/push so GitHub Pages updates on next push.
+4. Present a concise summary to the user:
    - Target Sunday date and liturgical title.
    - Scriptural theme depicted in the image.
    - Clickable link to the updated files: `assets/divider_theme.png` and the generated PowerPoint file (e.g. `[Title] y[Cycle] [Year].pptx`).
+   - Mention webapp mass history status and reminder to commit/push to deploy to GitHub Pages if hosted online.

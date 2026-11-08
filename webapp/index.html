@@ -6,6 +6,9 @@
   <title>Catholic Mass Hymn Planner</title>
   <meta name="description" content="Generate and send Sunday Mass hymn selections via WhatsApp">
   <meta name="theme-color" content="#1e293b">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
   <script>
     // Immediate anti-flash theme detection and application
     (function() {
@@ -1557,7 +1560,7 @@
       return selectedIds.map(id => HYMN_CATALOG.find(h => h.id === id)).filter(Boolean);
     }
 
-    let LECTIONARY_PSALM_RESPONSES = {"ordinary":{"A":{"1":"The Lord will bless his people with peace.","2":"Here am I, Lord; I come to do your will.","3":"The Lord is my light and my salvation.","4":"Blessed are the poor in spirit; the kingdom of heaven is theirs!","5":"A light rises in the darkness for the upright.","6":"They are happy who follow God's law!","7":"The Lord is compassion and love.","8":"Rest in God alone, my soul.","9":"Lord, be my rock of safety.","10":"To one whose way is blameless, I will show the salvation of God.","11":"We are his people: the sheep of his flock.","12":"Lord, in your great love, answer me.","13":"Forever I will sing the goodness of the Lord.","14":"I will praise your name for ever, my king and my God.","15":"The seed that falls on good ground will yield a fruitful harvest.","16":"Lord, you are good and forgiving.","17":"Lord, I love your commands.","18":"The hand of the Lord feeds us; he answers all our needs.","19":"Lord, let us see your kindness, and grant us your salvation.","20":"O God, let all the nations praise you!","21":"Lord, your love is eternal; do not forsake the work of your hands.","22":"For you my soul is thirsting, O Lord my God.","23":"If today you hear his voice, harden not your hearts.","24":"The Lord is compassion and love, slow to anger and rich in mercy.","25":"The Lord is near to all who call upon him.","26":"Remember your mercies, O Lord.","27":"The vineyard of the Lord is the house of Israel.","28":"In the Lord's own house shall I dwell for length of days unending.","29":"Give the Lord glory and power.","30":"I love you, Lord, my strength.","31":"In you, Lord, I have found my peace.","32":"For you my soul is thirsting, O Lord my God.","33":"O blessed are those who fear the Lord.","34":"The Lord is my shepherd; there is nothing I shall want."},"B":{"1":"The Lord will bless his people with peace.","2":"Here am I, Lord; I come to do your will.","3":"Teach me your ways, O Lord.","4":"If today you hear his voice, harden not your hearts.","5":"Praise the Lord, who heals the brokenhearted.","6":"I turn to you, Lord, in time of trouble, and you fill me with the joy of salvation.","7":"Heal my soul, Lord, for I have sinned against you.","8":"The Lord is compassion and love.","9":"Sing with joy to God our help.","10":"With the Lord there is mercy, and fullness of redemption.","11":"It is good to give you thanks, O Lord.","12":"Give thanks to the Lord, his love is everlasting.","13":"I will praise you, Lord, for you have rescued me.","14":"Our eyes are on the Lord till he shows us his mercy.","15":"Let us see, O Lord, your mercy and give us your saving help.","16":"The Lord is my shepherd; there is nothing I shall want.","17":"The hand of the Lord feeds us; he answers all our needs.","18":"The Lord gave them bread from heaven.","19":"Taste and see the goodness of the Lord.","20":"Taste and see the goodness of the Lord.","21":"Taste and see the goodness of the Lord.","22":"The just will live in the presence of the Lord.","23":"My soul, give praise to the Lord.","24":"I will walk before the Lord, in the land of the living.","25":"The Lord upholds my life.","26":"The precepts of the Lord gladden the heart.","27":"May the Lord bless us all the days of our lives.","28":"Fill us with your merciful love and we shall exult.","29":"May your love be upon us, O Lord, as we place all our hope in you.","30":"What marvels the Lord worked for us! Indeed we were glad.","31":"I love you, Lord, my strength.","32":"My soul, give praise to the Lord.","33":"Preserve me, God, I take refuge in you.","34":"The Lord is king, with majesty enrobed."},"C":{"1":"The Lord will bless his people with peace.","2":"Proclaim his marvelous deeds to all the nations.","3":"Your words, Lord, are spirit and life.","4":"My lips will tell of your help.","5":"Before the angels I will bless you, O Lord.","6":"Happy the man who has placed his trust in the Lord.","7":"The Lord is compassion and love.","8":"It is good to give you thanks, O Lord.","9":"Go out to the whole world, proclaim the Good News.","10":"I will praise you, Lord, for you have rescued me.","11":"Forgive, Lord, the guilt of my sin.","12":"For you my soul is thirsting, O Lord my God.","13":"Preserve me, God, I take refuge in you.","14":"Cry out with joy to God, all the earth.","15":"Seek the Lord, you who are poor, and your hearts will revive.","16":"The just will live in the presence of the Lord.","17":"On the day I called, you answered me, O Lord.","18":"If today you hear his voice, harden not your hearts.","19":"Happy the people the Lord has chosen as his own.","20":"Lord, come to my aid!","21":"Go out to the whole world, proclaim the Good News.","22":"In your goodness, O God, you have prepared a home for the poor.","23":"O Lord, you have been our refuge, from one generation to the next.","24":"I will leave this place and go to my father.","25":"Praise the Lord, who raises the poor.","26":"My soul, give praise to the Lord.","27":"O that today you would listen to his voice! Harden not your hearts.","28":"The Lord has shown his salvation to the nations.","29":"Our help is in the name of the Lord, who made heaven and earth.","30":"This poor man called; the Lord heard him.","31":"I will bless your name for ever, O God my King.","32":"I shall be filled, when I awake, with the sight of your glory, O Lord.","33":"The Lord comes to rule the earth with justice.","34":"I rejoiced when I heard them say: 'Let us go to God's house.'"}},"advent":{"A":{"1":"I rejoiced when I heard them say: 'Let us go to God's house.'","2":"In his days justice shall flourish and peace till the moon fails.","3":"Lord, come and save us.","4":"Let the Lord enter; he is king of glory."},"B":{"1":"Lord, make us turn to you; let us see your face and we shall be saved.","2":"Let us see, O Lord, your mercy and give us your saving help.","3":"My soul rejoices in my God.","4":"I will sing for ever of your love, O Lord."},"C":{"1":"To you, O Lord, I lift up my soul.","2":"What marvels the Lord worked for us! Indeed we were glad.","3":"Sing and shout for joy for great in your midst is the Holy One of Israel.","4":"Lord, make us turn to you; let us see your face and we shall be saved."}},"lent":{"A":{"1":"Have mercy on us, O Lord, for we have sinned.","2":"May your love be upon us, O Lord, as we place all our hope in you.","3":"O that today you would listen to his voice! Harden not your hearts.","4":"The Lord is my shepherd; there is nothing I shall want.","5":"With the Lord there is mercy and fullness of redemption.","palm":"My God, my God, why have you forsaken me?"},"B":{"1":"Your ways, Lord, are faithfulness and love for those who keep your covenant.","2":"I will walk in the presence of the Lord in the land of the living.","3":"You, Lord, have the message of eternal life.","4":"O let my tongue cleave to my mouth if I remember you not!","5":"A pure heart create for me, O God.","palm":"My God, my God, why have you forsaken me?"},"C":{"1":"Be with me, Lord, in distress.","2":"The Lord is my light and my help.","3":"The Lord is compassion and love.","4":"Taste and see that the Lord is good.","5":"What marvels the Lord worked for us! Indeed we were glad.","palm":"My God, my God, why have you forsaken me?"}},"easter":{"A":{"1":"This day was made by the Lord; we rejoice and are glad.","2":"Give thanks to the Lord for he is good, for his love has no end.","3":"Lord, you will show us the path of life.","4":"The Lord is my shepherd; there is nothing I shall want.","5":"May your love be upon us, O Lord, as we place all our hope in you.","6":"Cry out with joy to God, all the earth.","ascension":"God goes up with shouts of joy; the Lord goes up with trumpet blast.","7":"I am sure I shall see the Lord's goodness in the land of the living.","pentecost":"Send forth your Spirit, O Lord, and renew the face of the earth."},"B":{"1":"This day was made by the Lord; we rejoice and are glad.","2":"Give thanks to the Lord for he is good, for his love has no end.","3":"Lift up the light of your face on us, O Lord.","4":"The stone which the builders rejected has become the corner stone.","5":"You, Lord, are my praise in the great assembly.","6":"The Lord has shown his salvation to the nations.","ascension":"God goes up with shouts of joy; the Lord goes up with trumpet blast.","7":"The Lord has set his triumph in heaven.","pentecost":"Send forth your Spirit, O Lord, and renew the face of the earth."},"C":{"1":"This day was made by the Lord; we rejoice and are glad.","2":"Give thanks to the Lord for he is good, for his love has no end.","3":"I will praise you, Lord, you have rescued me.","4":"We are his people, the sheep of his flock.","5":"I will bless your name for ever, O God my King.","6":"O God, be gracious and bless us and let your face shed its light upon us.","ascension":"God goes up with shouts of joy; the Lord goes up with trumpet blast.","7":"The Lord is king, the most high above all the earth.","pentecost":"Send forth your Spirit, O Lord, and renew the face of the earth."}},"solemnities":{"trinity":{"A":"Glory and praise for ever!","B":"Blessed the people the Lord has chosen to be his own.","C":"O Lord, our God, how wonderful your name in all the earth!"},"corpus_christi":{"A":"Praise the Lord, Jerusalem.","B":"I will take the cup of salvation, and call on the name of the Lord.","C":"You are a priest for ever, in the line of Melchizedek."},"holy_family":{"A":"Blessed are those who fear the Lord and walk in his ways.","B":"The Lord remembers his covenant for ever.","C":"Blessed are they who dwell in your house, O Lord."},"christmas2":"The Word became flesh, and made his dwelling among us.","epiphany":"Lord, every nation on earth will adore you.","baptism":"The Lord will bless his people with peace.","all_saints":"Lord, this is the people that longs to see your face."}};
+    let LECTIONARY_PSALM_RESPONSES = {"ordinary":{"A":{"1":"The Lord will bless his people with peace.","2":"Here am I, Lord; I come to do your will.","3":"The Lord is my light and my salvation.","4":"Blessed are the poor in spirit; the kingdom of heaven is theirs!","5":"A light rises in the darkness for the upright.","6":"They are happy who follow God's law!","7":"The Lord is compassion and love.","8":"Rest in God alone, my soul.","9":"Lord, be my rock of safety.","10":"To one whose way is blameless, I will show the salvation of God.","11":"We are his people: the sheep of his flock.","12":"Lord, in your great love, answer me.","13":"Forever I will sing the goodness of the Lord.","14":"I will praise your name for ever, my king and my God.","15":"The seed that falls on good ground will yield a fruitful harvest.","16":"Lord, you are good and forgiving.","17":"Lord, I love your commands.","18":"The hand of the Lord feeds us; he answers all our needs.","19":"Lord, let us see your kindness, and grant us your salvation.","20":"O God, let all the nations praise you!","21":"Lord, your love is eternal; do not forsake the work of your hands.","22":"For you my soul is thirsting, O Lord my God.","23":"If today you hear his voice, harden not your hearts.","24":"The Lord is compassion and love, slow to anger and rich in mercy.","25":"The Lord is near to all who call upon him.","26":"Remember your mercies, O Lord.","27":"The vineyard of the Lord is the house of Israel.","28":"In the Lord's own house shall I dwell for length of days unending.","29":"Give the Lord glory and power.","30":"I love you, Lord, my strength.","31":"In you, Lord, I have found my peace.","32":"For you my soul is thirsting, O Lord my God.","33":"O blessed are those who fear the Lord.","34":"The Lord is my shepherd; there is nothing I shall want."},"B":{"1":"The Lord will bless his people with peace.","2":"Here am I, Lord; I come to do your will.","3":"Teach me your ways, O Lord.","4":"If today you hear his voice, harden not your hearts.","5":"Praise the Lord, who heals the brokenhearted.","6":"I turn to you, Lord, in time of trouble, and you fill me with the joy of salvation.","7":"Heal my soul, Lord, for I have sinned against you.","8":"The Lord is compassion and love.","9":"Sing with joy to God our help.","10":"With the Lord there is mercy, and fullness of redemption.","11":"It is good to give you thanks, O Lord.","12":"Give thanks to the Lord, his love is everlasting.","13":"I will praise you, Lord, for you have rescued me.","14":"Our eyes are on the Lord till he shows us his mercy.","15":"Let us see, O Lord, your mercy and give us your saving help.","16":"The Lord is my shepherd; there is nothing I shall want.","17":"The hand of the Lord feeds us; he answers all our needs.","18":"The Lord gave them bread from heaven.","19":"Taste and see the goodness of the Lord.","20":"Taste and see the goodness of the Lord.","21":"Taste and see the goodness of the Lord.","22":"The just will live in the presence of the Lord.","23":"My soul, give praise to the Lord.","24":"I will walk before the Lord, in the land of the living.","25":"The Lord upholds my life.","26":"The precepts of the Lord gladden the heart.","27":"May the Lord bless us all the days of our lives.","28":"Fill us with your merciful love and we shall exult.","29":"May your love be upon us, O Lord, as we place all our hope in you.","30":"What marvels the Lord worked for us! Indeed we were glad.","31":"I love you, Lord, my strength.","32":"My soul, give praise to the Lord.","33":"Preserve me, God, I take refuge in you.","34":"The Lord is king, with majesty enrobed."},"C":{"1":"The Lord will bless his people with peace.","2":"Proclaim his marvelous deeds to all the nations.","3":"Your words, Lord, are spirit and life.","4":"My lips will tell of your help.","5":"Before the angels I will bless you, O Lord.","6":"Happy the man who has placed his trust in the Lord.","7":"The Lord is compassion and love.","8":"It is good to give you thanks, O Lord.","9":"Go out to the whole world, proclaim the Good News.","10":"I will praise you, Lord, for you have rescued me.","11":"Forgive, Lord, the guilt of my sin.","12":"For you my soul is thirsting, O Lord my God.","13":"Preserve me, God, I take refuge in you.","14":"Cry out with joy to God, all the earth.","15":"Seek the Lord, you who are poor, and your hearts will revive.","16":"The just will live in the presence of the Lord.","17":"On the day I called, you answered me, O Lord.","18":"If today you hear his voice, harden not your hearts.","19":"Happy the people the Lord has chosen as his own.","20":"Lord, come to my aid!","21":"Go out to the whole world, proclaim the Good News.","22":"In your goodness, O God, you have prepared a home for the poor.","23":"O Lord, you have been our refuge, from one generation to the next.","24":"I will leave this place and go to my father.","25":"Praise the Lord, who raises the poor.","26":"My soul, give praise to the Lord.","27":"O that today you would listen to his voice! Harden not your hearts.","28":"The Lord has shown his salvation to the nations.","29":"Our help is in the name of the Lord, who made heaven and earth.","30":"This poor man called; the Lord heard him.","31":"I will bless your name for ever, O God my King.","32":"I shall be filled, when I awake, with the sight of your glory, O Lord.","33":"The Lord comes to rule the earth with justice.","34":"I rejoiced when I heard them say: 'Let us go to God's house.'"}},"advent":{"A":{"1":"I rejoiced when I heard them say: 'Let us go to God's house.'","2":"In his days justice shall flourish and peace till the moon fails.","3":"Lord, come and save us.","4":"Let the Lord enter; he is king of glory."},"B":{"1":"Lord, make us turn to you; let us see your face and we shall be saved.","2":"Let us see, O Lord, your mercy and give us your saving help.","3":"My soul rejoices in my God.","4":"I will sing for ever of your love, O Lord."},"C":{"1":"To you, O Lord, I lift up my soul.","2":"What marvels the Lord worked for us! Indeed we were glad.","3":"Sing and shout for joy for great in your midst is the Holy One of Israel.","4":"Lord, make us turn to you; let us see your face and we shall be saved."}},"lent":{"A":{"1":"Have mercy on us, O Lord, for we have sinned.","2":"May your love be upon us, O Lord, as we place all our hope in you.","3":"O that today you would listen to his voice! Harden not your hearts.","4":"The Lord is my shepherd; there is nothing I shall want.","5":"With the Lord there is mercy and fullness of redemption.","palm":"My God, my God, why have you forsaken me?"},"B":{"1":"Your ways, Lord, are faithfulness and love for those who keep your covenant.","2":"I will walk in the presence of the Lord in the land of the living.","3":"You, Lord, have the message of eternal life.","4":"O let my tongue cleave to my mouth if I remember you not!","5":"A pure heart create for me, O God.","palm":"My God, my God, why have you forsaken me?"},"C":{"1":"Be with me, Lord, in distress.","2":"The Lord is my light and my help.","3":"The Lord is compassion and love.","4":"Taste and see that the Lord is good.","5":"What marvels the Lord worked for us! Indeed we were glad.","palm":"My God, my God, why have you forsaken me?"}},"easter":{"A":{"1":"This day was made by the Lord; we rejoice and are glad.","2":"Give thanks to the Lord for he is good, for his love has no end.","3":"Lord, you will show us the path of life.","4":"The Lord is my shepherd; there is nothing I shall want.","5":"May your love be upon us, O Lord, as we place all our hope in you.","6":"Cry out with joy to God, all the earth.","ascension":"God goes up with shouts of joy; the Lord goes up with trumpet blast.","7":"I am sure I shall see the Lord's goodness in the land of the living.","pentecost":"Send forth your Spirit, O Lord, and renew the face of the earth."},"B":{"1":"This day was made by the Lord; we rejoice and are glad.","2":"Give thanks to the Lord for he is good, for his love has no end.","3":"Lift up the light of your face on us, O Lord.","4":"The stone which the builders rejected has become the corner stone.","5":"You, Lord, are my praise in the great assembly.","6":"The Lord has shown his salvation to the nations.","ascension":"God goes up with shouts of joy; the Lord goes up with trumpet blast.","7":"The Lord has set his triumph in heaven.","pentecost":"Send forth your Spirit, O Lord, and renew the face of the earth."},"C":{"1":"This day was made by the Lord; we rejoice and are glad.","2":"Give thanks to the Lord for he is good, for his love has no end.","3":"I will praise you, Lord, you have rescued me.","4":"We are his people, the sheep of his flock.","5":"I will bless your name for ever, O God my King.","6":"O God, be gracious and bless us and let your face shed its light upon us.","ascension":"God goes up with shouts of joy; the Lord goes up with trumpet blast.","7":"The Lord is king, the most high above all the earth.","pentecost":"Send forth your Spirit, O Lord, and renew the face of the earth."}},"solemnities":{"trinity":{"A":"Glory and praise for ever!","B":"Blessed the people the Lord has chosen to be his own.","C":"O Lord, our God, how wonderful your name in all the earth!"},"corpus_christi":{"A":"Praise the Lord, Jerusalem.","B":"I will take the cup of salvation, and call on the name of the Lord.","C":"You are a priest for ever, in the line of Melchizedek."},"holy_family":{"A":"Blessed are those who fear the Lord and walk in his ways.","B":"The Lord remembers his covenant for ever.","C":"Blessed are they who dwell in your house, O Lord."},"christmas2":"The Word became flesh, and made his dwelling among us.","epiphany":"Lord, every nation on earth will adore you.","baptism":"The Lord will bless his people with peace.","all_saints":"These are the people who seek your face, O Lord."}};
     function resolveLectionaryPsalmResponse(ev, litYearStr) {
       if (!ev) return '';
       const ps = LECTIONARY_PSALM_RESPONSES || {};
@@ -1768,6 +1771,19 @@
       } catch (e) {
         console.warn('Could not load psalms.json directly, using fallback', e);
       }
+      try {
+        const hRes = await fetch('history.json?v=' + Date.now(), { cache: 'no-store' });
+        if (hRes.ok) {
+          const fileHistory = await hRes.json();
+          if (Array.isArray(fileHistory) && fileHistory.length > 0) {
+            SERVER_HISTORY = fileHistory;
+            syncMassHistory(fileHistory);
+            renderAll();
+          }
+        }
+      } catch (e) {
+        console.warn('Could not load history.json directly, using embedded fallback', e);
+      }
       if (massDateInput.value) {
         await updateLiturgicalSuggestions(massDateInput.value);
       }
@@ -1838,76 +1854,189 @@
       }
     }
 
+    let DEFAULT_MASS_HISTORY = [
+      {
+            "date": "2026-11-08",
+            "sundayTitle": "32nd Sun of Ord Time (Year A)",
+            "massSetting": "mass_of_renew",
+            "entrance": "blessed_assurance",
+            "offertory": [
+                  "in_bread_we_bring_you_lord",
+                  "all_that_i_am_all_that_i_do",
+                  "christ_be_beside_me"
+            ],
+            "communion": [
+                  "through_it_all",
+                  "all_to_jesus_i_surrender"
+            ],
+            "recessional": "we_walk_by_faith_and_not_by_sight"
+      },
+      {
+            "date": "2026-11-01",
+            "sundayTitle": "All Saints (Year A)",
+            "massSetting": "mass_of_renew",
+            "entrance": "holy_god_we_praise_thy_name",
+            "offertory": [
+                  "father_i_place_into_your_hands",
+                  "what_can_we_offer_you_lord_our_god",
+                  "christ_be_beside_me"
+            ],
+            "communion": [
+                  "i_will_run_to_you",
+                  "all_to_jesus_i_surrender"
+            ],
+            "recessional": "walk_with_me_oh_my_lord"
+      },
+      {
+            "date": "2026-10-18",
+            "sundayTitle": "29th Sun in Ord Time (Year A)",
+            "massSetting": "mass_of_renew",
+            "entrance": "immortal_invisible",
+            "offertory": [
+                  "i_watch_the_sunrise",
+                  "this_is_my_body_broken_for_you"
+            ],
+            "communion": [
+                  "through_it_all"
+            ],
+            "recessional": "tell_out_my_soul"
+      },
+      {
+            "date": "2026-10-11",
+            "sundayTitle": "28th Sun in Ord Time (Year A)",
+            "massSetting": "mass_of_renew",
+            "entrance": "the_churchs_one_foundation",
+            "offertory": [
+                  "take_our_bread",
+                  "to_be_the_body_of_the_lord_in_this_world",
+                  "christ_be_beside_me"
+            ],
+            "communion": [
+                  "as_the_deer",
+                  "all_to_jesus_i_surrender"
+            ],
+            "recessional": "go_the_mass_is_ended"
+      },
+      {
+            "date": "2026-10-04",
+            "sundayTitle": "27th Sun in Ord Time (Year A)",
+            "massSetting": "mass_of_renew",
+            "entrance": "praise_to_the_lord_the_almighty",
+            "offertory": [
+                  "take_our_bread",
+                  "lord_accept_the_gifts_we_offer",
+                  "all_that_i_am_all_that_i_do"
+            ],
+            "communion": [
+                  "soul_of_my_saviour",
+                  "sweet_sacrement_divine"
+            ],
+            "recessional": "tell_out_my_soul"
+      },
+      {
+            "date": "2026-09-27",
+            "sundayTitle": "26th Sun in Ord Time (Year A)",
+            "massSetting": "mass_of_renew",
+            "entrance": "all_people_that_on_earth_do_dwell",
+            "offertory": [
+                  "in_bread_we_bring_you_lord",
+                  "gifts_of_bread_and_wine"
+            ],
+            "communion": [
+                  "one_bread_one_body",
+                  "o_bread_of_heaven"
+            ],
+            "recessional": "to_god_be_the_glory"
+      },
+      {
+            "date": "2026-09-20",
+            "sundayTitle": "25th Sun in Ord Time (Year A)",
+            "massSetting": "mass_of_renew",
+            "entrance": "the_churchs_one_foundation",
+            "offertory": [
+                  "take_our_bread",
+                  "blessed_are_you_lord_god_of_all_creation"
+            ],
+            "communion": [
+                  "as_the_deer",
+                  "i_am_the_bread_of_life_toolan"
+            ],
+            "recessional": "shine_jesus_shine"
+      }
+];
+
     function getDefaultMassHistory() {
-      return [
-        {
-          date: '2026-10-11',
-          sundayTitle: '28th Sun in Ord Time (Year A)',
-          massSetting: 'mass_of_renew',
-          entrance: 'the_churchs_one_foundation',
-          offertory: ['take_our_bread', 'to_be_the_body_of_the_lord_in_this_world', 'christ_be_beside_me'],
-          communion: ['as_the_deer', 'all_to_jesus_i_surrender'],
-          recessional: 'go_the_mass_is_ended'
-        },
-        {
-          date: '2026-10-04',
-          sundayTitle: '27th Sun in Ord Time (Year A)',
-          massSetting: 'mass_of_renew',
-          entrance: 'praise_to_the_lord_the_almighty',
-          offertory: ['take_our_bread', 'lord_accept_the_gifts_we_offer', 'all_that_i_am_all_that_i_do'],
-          communion: ['soul_of_my_saviour', 'sweet_sacrement_divine'],
-          recessional: 'tell_out_my_soul'
-        },
-        {
-          date: '2026-09-27',
-          sundayTitle: '26th Sun in Ord Time (Year A)',
-          massSetting: 'mass_of_renew',
-          entrance: 'all_people_that_on_earth_do_dwell',
-          offertory: ['in_bread_we_bring_you_lord', 'gifts_of_bread_and_wine'],
-          communion: ['one_bread_one_body', 'o_bread_of_heaven'],
-          recessional: 'to_god_be_the_glory'
-        },
-        {
-          date: '2026-09-20',
-          sundayTitle: '25th Sun in Ord Time (Year A)',
-          massSetting: 'mass_of_renew',
-          entrance: 'the_churchs_one_foundation',
-          offertory: ['take_our_bread', 'blessed_are_you_lord_god_of_all_creation'],
-          communion: ['as_the_deer', 'i_am_the_bread_of_life_toolan'],
-          recessional: 'shine_jesus_shine'
-        },
-        {
-          date: '2026-09-13',
-          sundayTitle: '24th Sun in Ord Time (Year A)',
-          massSetting: 'mass_of_renew',
-          entrance: 'praise_my_soul_the_king_of_heaven',
-          offertory: ['lord_accept_the_gifts_we_offer', 'what_can_we_offer_you_lord_our_god'],
-          communion: ['soul_of_my_saviour', 'sweet_sacrement_divine'],
-          recessional: 'now_thank_we_all_our_god'
+      return DEFAULT_MASS_HISTORY;
+    }
+
+    let SERVER_HISTORY = null;
+
+    function syncMassHistory(sourceHistory) {
+      if (!Array.isArray(sourceHistory) || sourceHistory.length === 0) return;
+      try {
+        let local = [];
+        const raw = localStorage.getItem('mass_history');
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (Array.isArray(parsed)) local = parsed;
         }
-      ];
+
+        const map = new Map();
+        // 1. Upstream source of truth (from history.json or embedded DEFAULT_MASS_HISTORY)
+        sourceHistory.forEach(item => {
+          if (item && item.date) map.set(item.date, item);
+        });
+        // 2. Keep any manual browser additions for dates not present upstream
+        local.forEach(item => {
+          if (item && item.date && !map.has(item.date)) {
+            map.set(item.date, item);
+          }
+        });
+
+        const merged = Array.from(map.values()).sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+        localStorage.setItem('mass_history', JSON.stringify(merged.slice(0, 15)));
+        return merged;
+      } catch (e) {
+        console.warn('Error syncing mass history with localStorage', e);
+      }
     }
 
     function getMassHistory() {
+      let merged = null;
       try {
         const raw = localStorage.getItem('mass_history');
         if (raw) {
-          let parsed = JSON.parse(raw);
+          const parsed = JSON.parse(raw);
           if (Array.isArray(parsed) && parsed.length > 0) {
-            // Ensure 2026-10-11 from mass_setup.csv is included if older cache exists
-            if (!parsed.some(m => m.date === '2026-10-11')) {
-              const defaultList = getDefaultMassHistory();
-              parsed.unshift(defaultList[0]);
-              parsed = parsed.slice(0, 5);
-              localStorage.setItem('mass_history', JSON.stringify(parsed));
-            }
-            return parsed;
+            merged = parsed;
           }
         }
       } catch (e) {
         console.warn('Failed to parse mass_history from localStorage', e);
       }
-      return getDefaultMassHistory();
+
+      // Ensure that fresh embedded history or server history is always merged in,
+      // preventing stale localStorage from trapping the user in older weeks
+      const truth = (Array.isArray(SERVER_HISTORY) && SERVER_HISTORY.length > 0)
+        ? SERVER_HISTORY
+        : DEFAULT_MASS_HISTORY;
+
+      if (Array.isArray(truth) && truth.length > 0) {
+        if (!merged) {
+          merged = truth;
+        } else {
+          // Check if truth has any dates missing or if truth has newer dates
+          const map = new Map();
+          truth.forEach(m => { if (m && m.date) map.set(m.date, m); });
+          merged.forEach(m => { if (m && m.date && !map.has(m.date)) map.set(m.date, m); });
+          merged = Array.from(map.values()).sort((a, b) => (b.date || '').localeCompare(a.date || '')).slice(0, 15);
+          try {
+            localStorage.setItem('mass_history', JSON.stringify(merged));
+          } catch (_) {}
+        }
+      }
+
+      return merged || DEFAULT_MASS_HISTORY || [];
     }
 
     function getRecentHymnInfo(hymnId) {
@@ -2738,6 +2867,7 @@
 
     // Init
     applyTheme(state.theme);
+    syncMassHistory(DEFAULT_MASS_HISTORY);
     initDate();
     loadCatalog();
   </script>

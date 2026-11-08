@@ -85,9 +85,21 @@ def sync_catalog(assets_dir='assets', webapp_dir='webapp'):
                 updated_html,
                 flags=re.DOTALL
             )
+        # Also sync history.json if available
+        history_path = os.path.join(webapp_dir, 'history.json')
+        if os.path.exists(history_path):
+            with open(history_path, 'r', encoding='utf-8') as hf:
+                hist_data = json.load(hf)
+            hist_json = json.dumps(hist_data, indent=6)
+            updated_html = re.sub(
+                r'let DEFAULT_MASS_HISTORY = \[.*?\];',
+                lambda m: f'let DEFAULT_MASS_HISTORY = {hist_json};',
+                updated_html,
+                flags=re.DOTALL
+            )
         with open(html_path, 'w', encoding='utf-8') as f:
             f.write(updated_html)
-        print(f"[Success] Catalog & Psalms embedded into {html_path}")
+        print(f"[Success] Catalog, Psalms & Mass History embedded into {html_path}")
 
     print(f"[Success] Catalog synced: {len(hymns)} hymns written to {json_path}")
     return hymns

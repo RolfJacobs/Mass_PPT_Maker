@@ -1,0 +1,110 @@
+[
+  {
+    "date": "2026-11-08",
+    "sundayTitle": "32nd Sun of Ord Time (Year A)",
+    "massSetting": "mass_of_renew",
+    "entrance": "blessed_assurance",
+    "offertory": [
+      "in_bread_we_bring_you_lord",
+      "all_that_i_am_all_that_i_do",
+      "christ_be_beside_me"
+    ],
+    "communion": [
+      "through_it_all",
+      "all_to_jesus_i_surrender"
+    ],
+    "recessional": "we_walk_by_faith_and_not_by_sight"
+  },
+  {
+    "date": "2026-11-01",
+    "sundayTitle": "All Saints (Year A)",
+    "massSetting": "mass_of_renew",
+    "entrance": "holy_god_we_praise_thy_name",
+    "offertory": [
+      "father_i_place_into_your_hands",
+      "what_can_we_offer_you_lord_our_god",
+      "christ_be_beside_me"
+    ],
+    "communion": [
+      "i_will_run_to_you",
+      "all_to_jesus_i_surrender"
+    ],
+    "recessional": "walk_with_me_oh_my_lord"
+  },
+  {
+    "date": "2026-10-18",
+    "sundayTitle": "29th Sun in Ord Time (Year A)",
+    "massSetting": "mass_of_renew",
+    "entrance": "immortal_invisible",
+    "offertory": [
+      "i_watch_the_sunrise",
+      "this_is_my_body_broken_for_you"
+    ],
+    "communion": [
+      "through_it_all"
+    ],
+    "recessional": "tell_out_my_soul"
+  },
+  {
+    "date": "2026-10-11",
+    "sundayTitle": "28th Sun in Ord Time (Year A)",
+    "massSetting": "mass_of_renew",
+    "entrance": "the_churchs_one_foundation",
+    "offertory": [
+      "take_our_bread",
+      "to_be_the_body_of_the_lord_in_this_world",
+      "christ_be_beside_me"
+    ],
+    "communion": [
+      "as_the_deer",
+      "all_to_jesus_i_surrender"
+    ],
+    "recessional": "go_the_mass_is_ended"
+  },
+  {
+    "date": "2026-10-04",
+    "sundayTitle": "27th Sun in Ord Time (Year A)",
+    "massSetting": "mass_of_renew",
+    "entrance": "praise_to_the_lord_the_almighty",
+    "offertory": [
+      "take_our_bread",
+      "lord_accept_the_gifts_we_offer",
+      "all_that_i_am_all_that_i_do"
+    ],
+    "communion": [
+      "soul_of_my_saviour",
+      "sweet_sacrement_divine"
+    ],
+    "recessional": "tell_out_my_soul"
+  },
+  {
+    "date": "2026-09-27",
+    "sundayTitle": "26th Sun in Ord Time (Year A)",
+    "massSetting": "mass_of_renew",
+    "entrance": "all_people_that_on_earth_do_dwell",
+    "offertory": [
+      "in_bread_we_bring_you_lord",
+      "gifts_of_bread_and_wine"
+    ],
+    "communion": [
+      "one_bread_one_body",
+      "o_bread_of_heaven"
+    ],
+    "recessional": "to_god_be_the_glory"
+  },
+  {
+    "date": "2026-09-20",
+    "sundayTitle": "25th Sun in Ord Time (Year A)",
+    "massSetting": "mass_of_renew",
+    "entrance": "the_churchs_one_foundation",
+    "offertory": [
+      "take_our_bread",
+      "blessed_are_you_lord_god_of_all_creation"
+    ],
+    "communion": [
+      "as_the_deer",
+      "i_am_the_bread_of_life_toolan"
+    ],
+    "recessional": "shine_jesus_shine"
+  }
+]

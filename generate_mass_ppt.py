@@ -328,42 +328,56 @@ def parse_setup_csv(csv_path_or_text):
         line = line.strip()
         if not line or line.startswith('#'):
             continue
-        parts = [p.strip() for p in re.split(r'[;,]', line) if p.strip()]
-        if len(parts) >= 2:
-            key, val = parts[0].lower(), parts[1]
-            if key == 'mass':
-                hymns['mass_setting'] = val
-                continue
-            if key in ('response', 'psalm', 'psalm_response'):
-                hymns['response'] = val
-                continue
-            if key in ('title', 'celebration', 'celebration_title'):
-                hymns['celebration_title'] = val
-                continue
-            if key in ('entrance', 'entrance_hymn'):
-                hymns['entrance_hymn'] = val
-            elif key in ('recessional', 'recessional_hymn'):
-                hymns['recessional_hymn'] = val
-            elif key == 'offertory':
-                if len(parts) > 2:
-                    for i, p in enumerate(parts[1:], start=1):
-                        if p:
-                            hymns[f'offertory_{i}'] = p
-                else:
-                    hymns['offertory_1'] = val
-            elif key == 'communion':
-                if len(parts) > 2:
-                    for i, p in enumerate(parts[1:], start=1):
-                        if p:
-                            hymns[f'communion_{i}'] = p
-                else:
-                    hymns['communion_1'] = val
-            elif re.match(r'^offertory_\d+$', key):
-                hymns[key] = val
-            elif re.match(r'^communion_\d+$', key):
-                hymns[key] = val
-            elif key in KEY_MAP:
-                hymns[KEY_MAP[key]] = val
+
+        # Split on the first delimiter (; : or ,)
+        if ';' in line:
+            raw_key, raw_val = line.split(';', 1)
+        elif ':' in line and not line.lower().startswith('http'):
+            raw_key, raw_val = line.split(':', 1)
+        elif ',' in line:
+            raw_key, raw_val = line.split(',', 1)
+        else:
+            continue
+
+        key = raw_key.strip().lower()
+        val = raw_val.strip()
+
+        if key == 'mass':
+            hymns['mass_setting'] = val
+            continue
+        if key in ('response', 'psalm', 'psalm_response'):
+            hymns['response'] = val
+            continue
+        if key in ('title', 'celebration', 'celebration_title'):
+            hymns['celebration_title'] = val
+            continue
+
+        parts = [p.strip() for p in re.split(r'[;,]', raw_val) if p.strip()]
+        if not parts:
+            continue
+
+        if key in ('entrance', 'entrance_hymn'):
+            hymns['entrance_hymn'] = parts[0]
+        elif key in ('recessional', 'recessional_hymn'):
+            hymns['recessional_hymn'] = parts[0]
+        elif key == 'offertory':
+            if len(parts) > 1:
+                for i, p in enumerate(parts, start=1):
+                    hymns[f'offertory_{i}'] = p
+            else:
+                hymns['offertory_1'] = parts[0]
+        elif key == 'communion':
+            if len(parts) > 1:
+                for i, p in enumerate(parts, start=1):
+                    hymns[f'communion_{i}'] = p
+            else:
+                hymns['communion_1'] = parts[0]
+        elif re.match(r'^offertory_\d+$', key):
+            hymns[key] = parts[0]
+        elif re.match(r'^communion_\d+$', key):
+            hymns[key] = parts[0]
+        elif key in KEY_MAP:
+            hymns[KEY_MAP[key]] = parts[0]
     return hymns
 
 
@@ -943,6 +957,105 @@ def populate_mass_part(prs, sec_name, slide_indices, md_file_path):
         populate_lyrics(l_last, verses[-1], author=author)
 
 
+def update_webapp_history(hymn_setup, target_date, title_text, history_path=None):
+    """
+    Saves or updates the generated mass entry in webapp/history.json so that the
+    webapp always reflects the most recent masses, even when presentations are
+    generated via the CLI or agy skill.
+    """
+    if history_path is None:
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        history_path = os.path.join(base_dir, 'webapp', 'history.json')
+
+    date_str = target_date.strftime("%Y-%m-%d") if hasattr(target_date, 'strftime') else str(target_date)
+    cycle = get_liturgical_cycle_letter(target_date)
+    expanded_title = expand_celebration_title(title_text)
+    short_title = expanded_title.replace("Sunday", "Sun").replace("Ordinary", "Ord")
+    if f"Year {cycle}" not in short_title and f"Yr {cycle}" not in short_title:
+        short_title = f"{short_title} (Year {cycle})"
+
+    # Collect offertories in order
+    offertory_keys = sorted([k for k in hymn_setup if re.match(r'^offertory_\d+$', k)],
+                            key=lambda x: int(x.split('_')[1]))
+    offertories = [hymn_setup[k] for k in offertory_keys if hymn_setup[k]]
+    if not offertories and hymn_setup.get('offertory_1'):
+        offertories = [hymn_setup['offertory_1']]
+
+    # Collect communions in order
+    communion_keys = sorted([k for k in hymn_setup if re.match(r'^communion_\d+$', k)],
+                            key=lambda x: int(x.split('_')[1]))
+    communions = [hymn_setup[k] for k in communion_keys if hymn_setup[k]]
+    if not communions and hymn_setup.get('communion_1'):
+        communions = [hymn_setup['communion_1']]
+
+    raw_mass = hymn_setup.get('mass_setting', 'mass_of_renew')
+    mass_id = str(raw_mass).lower().replace(' ', '_')
+    if 'renew' in mass_id:
+        mass_id = 'mass_of_renew'
+    elif 'christ' in mass_id:
+        mass_id = 'mass_of_christ_the_saviour'
+    elif 'john' in mass_id:
+        mass_id = 'mass_of_st_john'
+    elif 'thomas' in mass_id or 'moore' in mass_id:
+        mass_id = 'mass_of_st_thomas_moore'
+
+    entry = {
+        "date": date_str,
+        "sundayTitle": short_title,
+        "massSetting": mass_id,
+        "entrance": hymn_setup.get('entrance_hymn', ''),
+        "offertory": offertories,
+        "communion": communions,
+        "recessional": hymn_setup.get('recessional_hymn', '')
+    }
+
+    history = []
+    if os.path.exists(history_path):
+        try:
+            with open(history_path, 'r', encoding='utf-8') as f:
+                history = json.load(f)
+                if not isinstance(history, list):
+                    history = []
+        except Exception as e:
+            print(f"[Warning] Could not read existing {history_path}: {e}")
+
+    # Remove existing entry for same date if present
+    history = [m for m in history if m.get('date') != date_str]
+    # Insert new entry at top
+    history.insert(0, entry)
+    # Sort descending by date
+    history.sort(key=lambda x: x.get('date', ''), reverse=True)
+    history = history[:15]
+
+    try:
+        os.makedirs(os.path.dirname(history_path), exist_ok=True)
+        with open(history_path, 'w', encoding='utf-8') as f:
+            json.dump(history, f, indent=2, ensure_ascii=False)
+        print(f"[Auto-Sync] Updated webapp mass history in {history_path} for {date_str} ({short_title})")
+    except Exception as e:
+        print(f"[Warning] Failed to write {history_path}: {e}")
+
+    # Also embed directly into webapp/index.html so offline, local file://, and GitHub Pages get instant updates
+    html_path = os.path.join(os.path.dirname(history_path), 'index.html')
+    if os.path.exists(html_path):
+        try:
+            with open(html_path, 'r', encoding='utf-8') as hf:
+                html_content = hf.read()
+            history_json = json.dumps(history, indent=6)
+            new_html = re.sub(
+                r'let DEFAULT_MASS_HISTORY = \[.*?\];',
+                lambda m: f'let DEFAULT_MASS_HISTORY = {history_json};',
+                html_content,
+                flags=re.DOTALL
+            )
+            if new_html != html_content:
+                with open(html_path, 'w', encoding='utf-8') as hf:
+                    hf.write(new_html)
+                print(f"[Auto-Sync] Embedded updated mass history into {html_path}")
+        except Exception as e:
+            print(f"[Warning] Failed to embed history into {html_path}: {e}")
+
+
 def generate_presentation(csv_path, template_path, output_path, title_text=None, response_text=None, image_path=None, target_date=None):
     """Main generation workflow."""
     print("=" * 60)
@@ -1115,6 +1228,13 @@ def generate_presentation(csv_path, template_path, output_path, title_text=None,
             shutil.copy2(output_path, "mass_presentation.pptx")
         except Exception:
             pass
+
+    # 10. Automatically sync generated mass into webapp/history.json
+    try:
+        update_webapp_history(hymn_setup, target_date, title_text)
+    except Exception as e:
+        print(f"[Warning] Failed to auto-sync webapp mass history: {e}")
+
     print(f"\n[Done] Successfully generated presentation: {output_path} (Total slides: {len(prs.slides)})")
     print("=" * 60)
     return output_path
