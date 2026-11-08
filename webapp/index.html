@@ -381,10 +381,11 @@
       border: 1px solid var(--dropdown-border);
       border-radius: 10px;
       box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.25);
-      max-height: 240px;
+      max-height: 320px;
       overflow-y: auto;
       z-index: 50;
       display: none;
+      -webkit-overflow-scrolling: touch;
     }
 
     .dropdown-item {
@@ -392,6 +393,8 @@
       cursor: pointer;
       border-bottom: 1px solid var(--dropdown-item-border);
       transition: background 0.15s;
+      content-visibility: auto;
+      contain-intrinsic-size: auto 54px;
     }
 
     .dropdown-item:last-child {
@@ -2161,6 +2164,7 @@
 
       function showResults(query) {
         dropdown.innerHTML = '';
+        const fragment = document.createDocumentFragment();
         const q = (query || '').toLowerCase().trim();
         const suggested = (state.suggestedHymns && state.suggestedHymns[sectionType]) || [];
 
@@ -2170,30 +2174,30 @@
             const header = document.createElement('div');
             header.className = 'dropdown-section-header';
             header.innerHTML = `⭐ Suggested for this Sunday`;
-            dropdown.appendChild(header);
+            fragment.appendChild(header);
 
             suggested.forEach(h => {
-              dropdown.appendChild(createDropdownItem(h, true));
+              fragment.appendChild(createDropdownItem(h, true));
             });
 
             const divider = document.createElement('div');
             divider.className = 'dropdown-section-divider';
-            divider.innerHTML = `All Hymns (A–Z)`;
-            dropdown.appendChild(divider);
+            divider.innerHTML = `All Hymns (${HYMN_CATALOG.length})`;
+            fragment.appendChild(divider);
           }
 
-          // Then render alphabetical catalog
-          const alphabetList = HYMN_CATALOG.filter(h => !suggested.some(s => s.id === h.id)).slice(0, 30);
+          // Render complete alphabetical catalog without cutoff
+          const alphabetList = HYMN_CATALOG.filter(h => !suggested.some(s => s.id === h.id));
           alphabetList.forEach(h => {
-            dropdown.appendChild(createDropdownItem(h, false));
+            fragment.appendChild(createDropdownItem(h, false));
           });
         } else {
-          // Searching
+          // Searching: show all matching hymns without cutoff
           const matches = HYMN_CATALOG.filter(h => 
             h.title.toLowerCase().includes(q) || 
             (h.first_line && h.first_line.toLowerCase().includes(q)) ||
             h.id.toLowerCase().includes(q)
-          ).slice(0, 25);
+          );
 
           // Custom option if user typed something not matching exactly
           if (!matches.some(m => m.title.toLowerCase() === q)) {
@@ -2213,7 +2217,7 @@
               dropdown.style.display = 'none';
               onSelect(slug, true);
             });
-            dropdown.appendChild(customItem);
+            fragment.appendChild(customItem);
           }
 
           if (matches.length === 0 && !query) {
@@ -2223,10 +2227,11 @@
 
           matches.forEach(h => {
             const isSug = suggested.some(s => s.id === h.id);
-            dropdown.appendChild(createDropdownItem(h, isSug));
+            fragment.appendChild(createDropdownItem(h, isSug));
           });
         }
 
+        dropdown.appendChild(fragment);
         dropdown.style.display = 'block';
       }
 
