@@ -3,17 +3,16 @@
     "date": "2026-11-22",
     "sundayTitle": "Christ the King (Year A)",
     "massSetting": "mass_of_christ_the_saviour",
-    "entrance": "praise_to_the_lord_the_almighty",
+    "entrance": "the_churchs_one_foundation",
     "offertory": [
-      "i_sing_a_song_to_you_lord",
-      "come_lord_jesus_come",
-      "lord_accept_the_gifts_we_offer"
+      "the_lords_my_shepherd",
+      "whatsoever_you_do",
+      "christ_be_beside_me"
     ],
     "communion": [
-      "still",
-      "jesus_we_enthrone_you"
+      "amazing_grace_pw"
     ],
-    "recessional": "sing_my_soul"
+    "recessional": "go_the_mass_is_ended"
   },
   {
     "date": "2026-11-15",
