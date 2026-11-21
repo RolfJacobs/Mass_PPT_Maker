@@ -1,5 +1,21 @@
 [
   {
+    "date": "2026-11-22",
+    "sundayTitle": "Christ the King (Year A)",
+    "massSetting": "mass_of_christ_the_saviour",
+    "entrance": "praise_to_the_lord_the_almighty",
+    "offertory": [
+      "i_sing_a_song_to_you_lord",
+      "come_lord_jesus_come",
+      "lord_accept_the_gifts_we_offer"
+    ],
+    "communion": [
+      "still",
+      "jesus_we_enthrone_you"
+    ],
+    "recessional": "sing_my_soul"
+  },
+  {
     "date": "2026-11-15",
     "sundayTitle": "33rd Sun of Ord Time (Year A)",
     "massSetting": "mass_of_christ_the_saviour",
